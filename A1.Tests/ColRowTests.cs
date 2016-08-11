@@ -28,12 +28,15 @@ namespace A1.Tests
             Assert.Equal(0, colrow.Row);
         }
 
-        [Fact]
-        public void Init()
+        [Theory]
+        [InlineData(12, 34)]
+        [InlineData(45, 67)]
+        [InlineData(67, 89)]
+        public void Init(int col, int row)
         {
-            var colrow = new ColRow(12, 34);
-            Assert.Equal(12, colrow.Col);
-            Assert.Equal(34, colrow.Row);
+            var colrow = new ColRow(col, row);
+            Assert.Equal(col, colrow.Col);
+            Assert.Equal(row, colrow.Row);
         }
     }
 }
