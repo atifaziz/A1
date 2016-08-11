@@ -38,5 +38,25 @@ namespace A1.Tests
             Assert.Equal(col, colrow.Col);
             Assert.Equal(row, colrow.Row);
         }
+
+        [Theory]
+        [InlineData("A1"   ,    0,  0)]
+        [InlineData("B1"   ,    1,  0)]
+        [InlineData("C1"   ,    2,  0)]
+        [InlineData("A5"   ,    0,  4)]
+        [InlineData("B5"   ,    1,  4)]
+        [InlineData("C5"   ,    2,  4)]
+        [InlineData("AA1"  ,   26,  0)]
+        [InlineData("AB2"  ,   27,  1)]
+        [InlineData("AC3"  ,   28,  2)]
+        [InlineData("ABC43",  730, 42)]
+        [InlineData("DEF43", 2839, 42)]
+        [InlineData("GHI43", 4948, 42)]
+        public void ParseA1(string s, int col, int row)
+        {
+            var colrow = ColRow.ParseA1(s);
+            Assert.Equal(col, colrow.Col);
+            Assert.Equal(row, colrow.Row);
+        }
     }
 }
