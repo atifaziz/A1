@@ -18,7 +18,7 @@ namespace A1.Tests
 {
     using Xunit;
 
-    public class ColRowTest
+    public class ColRowTests
     {
         [Fact]
         public void InitEmpty()
