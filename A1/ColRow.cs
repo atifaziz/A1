@@ -37,8 +37,7 @@ namespace A1
         public override bool Equals(object obj) => obj is ColRow && Equals((ColRow) obj);
         public override int GetHashCode() => unchecked((Col * 397) ^ Row);
 
-        public string FormatA1() =>
-            NumA1(Col + 1) + (Row + 1).ToString(CultureInfo.InvariantCulture);
+        public string FormatA1() => A1Convert.NumberColumnAlpha(Col + 1) + (Row + 1).ToString(CultureInfo.InvariantCulture);
 
         public override string ToString() =>
             $"({Col.ToString(CultureInfo.InvariantCulture)}, {Row.ToString(CultureInfo.InvariantCulture)}) = {FormatA1()}";
@@ -79,7 +78,7 @@ namespace A1
             var len = ii - i;
             if (len == 0)
                 goto error;
-            var col = A1Num(s.Substring(i, len));
+            var col = A1Convert.AlphaColumnNumber(s.Substring(i, len));
             int row;
             if (ii == s.Length)
                 goto error;
@@ -90,49 +89,6 @@ namespace A1
             return new ColRow(col - 1, row - 1);
             error:
             throw new FormatException($"'{s}' is not a valid A1 cell reference style.");
-        }
-
-        static int A1Num(string a1)
-        {
-            var c1 = 0;
-            var m = 1;
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var ch in a1)
-            {
-                var n = ch - 'A' + 1;
-                c1 = c1 * m + n;
-                m = 26;
-            }
-            return c1;
-        }
-
-        const int MaxColumn = 16384;
-        const string Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        static readonly string[] A1Cache = new string[MaxColumn];
-
-        static string NumA1(int num)
-        {
-            if (num < 1 || num > MaxColumn)
-                throw new ArgumentOutOfRangeException(nameof(num), $"Number must be between 1 and {MaxColumn}.");
-            var i = num - 1;
-            return A1Cache[i] ?? (A1Cache[i] = NumA1Core(num));
-        }
-
-        static string NumA1Core(int num)
-        {
-            // A..Z     = 1..26
-            // AA..ZZ   = 27..702
-            // AAA..XFD = 703..16384
-            var chars = new char[num >= 703 ? 3 : num >= 27 ? 2 : 1];
-            var i = chars.Length;
-            do
-            {
-                num -= 1;
-                var r = num % Alphabet.Length;
-                num = num / Alphabet.Length;
-                chars[--i] = Alphabet[r];
-            } while (num > 0);
-            return new string(chars);
         }
     }
 }
