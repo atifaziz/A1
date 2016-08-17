@@ -1,7 +1,12 @@
 {
     "version": "1.0.0-*",
     "buildOptions": {
-        "debugType": "portable"
+        "debugType": "portable",
+        "embed": {
+            "includeFiles": [
+                "AlphaColumns.txt"
+            ]
+        }
     },
     "dependencies": {
         "System.Runtime.Serialization.Primitives": "4.1.1",
