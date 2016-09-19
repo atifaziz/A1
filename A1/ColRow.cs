@@ -20,6 +20,7 @@ namespace A1
     using System.Diagnostics;
     using System.Globalization;
 
+
     [DebuggerDisplay("Col = {Col}, Row = {Row}")]
     public struct ColRow : IEquatable<ColRow>
     {
@@ -49,46 +50,5 @@ namespace A1
             && Row >= a.Row
             && Col <= b.Col
             && Row <= b.Row;
-
-        public static Tuple<ColRow, ColRow> ParseA1Range(string range) =>
-            ParseA1Range(range, Tuple.Create);
-
-        public static T ParseA1Range<T>(string range, Func<ColRow, ColRow, T> seletor)
-        {
-            var index = range.IndexOf(':');
-            if (index < 0)
-            {
-                var r = ParseA1(range);
-                return seletor(r, r);
-            }
-            var from = ParseA1(range.Substring(0, index));
-            var to = ParseA1(range.Substring(index + 1));
-            return seletor(@from, to);
-        }
-
-        public static ColRow ParseA1(string s)
-        {
-            if (s.Length == 0)
-                goto error;
-            var abs = s[0] == '$';
-            var i = abs ? 1 : 0;
-            var ii = i;
-            while (ii < s.Length && s[ii] >= 'A' && s[ii] <= 'Z')
-                ii++;
-            var len = ii - i;
-            if (len == 0)
-                goto error;
-            var col = A1Convert.AlphaColumnNumber(s.Substring(i, len));
-            int row;
-            if (ii == s.Length)
-                goto error;
-            if (s[ii] == '$')
-                ii++;
-            if (!int.TryParse(s.Substring(ii), NumberStyles.None, CultureInfo.InvariantCulture, out row))
-                goto error;
-            return new ColRow(col - 1, row - 1);
-            error:
-            throw new FormatException($"'{s}' is not a valid A1 cell reference style.");
-        }
     }
 }
