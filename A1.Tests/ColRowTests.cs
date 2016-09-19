@@ -38,5 +38,17 @@ namespace A1.Tests
             Assert.Equal(col, colrow.Col);
             Assert.Equal(row, colrow.Row);
         }
+
+        [Fact]
+        public void Equality()
+        {
+            Assert.True(new ColRow(12, 34).Equals(new ColRow(12, 34)));
+        }
+
+        [Fact]
+        public void InEquality()
+        {
+            Assert.False(new ColRow(12, 34).Equals(new ColRow(34, 12)));
+        }
     }
 }

@@ -121,5 +121,41 @@ namespace A1.Tests
             Assert.Equal(false, absolute.IsRowAbs);
             Assert.Equal(absolute.ColRow, address.ColRow);
         }
+
+        [Fact]
+        public void EqualityWithRelativeAnchor()
+        {
+            Assert.True(new Address(12, 34).Equals(new Address(12, 34)));
+        }
+
+        [Fact]
+        public void EqualityWithAbsoluteAnchor()
+        {
+            Assert.True(new Address(12, 34, true).Equals(new Address(12, 34, true)));
+        }
+
+        [Fact]
+        public void EqualityWithMixedAnchor()
+        {
+            Assert.True(new Address(true, 12, false, 34).Equals(new Address(true, 12, false, 34)));
+        }
+
+        [Fact]
+        public void InequalityWithRelativeAnchor()
+        {
+            Assert.False(new Address(12, 34).Equals(new Address(34, 12)));
+        }
+
+        [Fact]
+        public void InequalityWithAbsoluteAnchor()
+        {
+            Assert.False(new Address(12, 34).Equals(new Address(12, 34, true)));
+        }
+
+        [Fact]
+        public void InequalityWithMixedAnchor()
+        {
+            Assert.False(new Address(false, 12, true, 34).Equals(new Address(true, 12, false, 34)));
+        }
     }
 }
