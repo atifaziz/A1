@@ -19,8 +19,6 @@
     "debugType": "portable"
   },
 
-  "dependencies": {},
-
   "frameworks": {
     "netstandard1.0": {
       "dependencies": {
