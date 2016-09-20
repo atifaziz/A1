@@ -41,7 +41,7 @@ namespace A1
         public string FormatA1() => A1Convert.NumberColumnAlpha(Col + 1) + (Row + 1).ToString(CultureInfo.InvariantCulture);
 
         public override string ToString() =>
-            $"({Col.ToString(CultureInfo.InvariantCulture)}, {Row.ToString(CultureInfo.InvariantCulture)}) = {FormatA1()}";
+            "(" + Col.ToString(CultureInfo.InvariantCulture) + "," + Row.ToString(CultureInfo.InvariantCulture) + ")";
 
         public bool IsContainedIn(ColRow a, ColRow b) =>
             a.Col <= b.Col
