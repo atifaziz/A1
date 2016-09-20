@@ -1,14 +1,14 @@
 {
-    "version": "1.0.0-*",
-    "buildOptions": {
-        "debugType": "portable"
-    },
-    "dependencies": {},
-    "frameworks": {
-        "netstandard1.0": {
-            "dependencies": {
-                "System.Globalization": "4.0.11"
-            }
-        }
+  "version": "1.0.0-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {},
+  "frameworks": {
+    "netstandard1.0": {
+      "dependencies": {
+        "System.Globalization": "4.0.11"
+      }
     }
+  }
 }
