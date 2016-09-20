@@ -16,7 +16,10 @@ if not exist "%DOTNETEXE%" (
     echo https://dot.net
     exit /b 1
 )
-"%DOTNETEXE%" restore && call :build Debug && call :build Release
+"%DOTNETEXE%" --info ^
+  && "%DOTNETEXE%" restore ^
+  && call :build Debug ^
+  && call :build Release
 goto :EOF
 
 :build
