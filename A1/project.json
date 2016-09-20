@@ -1,9 +1,26 @@
 {
   "version": "1.0.0-*",
+  "title": "A1-Style Cell Address Parsing & Formatting",
+  "description": ".NET Standard 1.0 library whose purpose is to help parse and format A1-style cell references (or addresses) like $FOO$42, those typically found in spreadsheet programs such as Microsoft Excel.",
+  "authos": [ "Atif Aziz" ],
+  "copyright": "Copyright \u00a9 2016 Atif Aziz. All rights reserved.",
+
+  "packOptions": {
+    "projectUrl": "https://github.com/atifaziz/Kons",
+    "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+    "owners": [ "Atif Aziz" ],
+    "tags": [ "excel", "cell" ],
+    "files": {
+      "include": "../COPYING.txt"
+    }
+  },
+
   "buildOptions": {
     "debugType": "portable"
   },
+
   "dependencies": {},
+
   "frameworks": {
     "netstandard1.0": {
       "dependencies": {
