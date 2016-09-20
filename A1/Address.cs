@@ -58,6 +58,9 @@ namespace A1
         public Address MakeAbsolute() => new Address(Col, Row, true);
         public Address MakeRelative() => new Address(Col, Row);
 
+        public static bool operator ==(Address left, Address right) => left.Equals(right);
+        public static bool operator !=(Address left, Address right) => !left.Equals(right);
+
         static string FormatAbs(bool abs) => abs ? "$" : null;
 
         public static Tuple<Address, Address> ParseA1Range(string range) =>

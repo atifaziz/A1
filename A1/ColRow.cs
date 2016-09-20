@@ -47,5 +47,8 @@ namespace A1
             && Row >= a.Row
             && Col <= b.Col
             && Row <= b.Row;
+
+        public static bool operator ==(ColRow left, ColRow right) => left.Equals(right);
+        public static bool operator !=(ColRow left, ColRow right) => !left.Equals(right);
     }
 }
