@@ -7,8 +7,6 @@
     "frameworks": {
         "netstandard1.0": {
             "dependencies": {
-                "System.Diagnostics.Debug": "4.0.11",
-                "System.Diagnostics.Tools": "4.0.1",
                 "System.Globalization": "4.0.11"
             }
         }

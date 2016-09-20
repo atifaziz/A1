@@ -17,11 +17,8 @@
 namespace A1
 {
     using System;
-    using System.Diagnostics;
     using System.Globalization;
 
-
-    [DebuggerDisplay("Col = {Col}, Row = {Row}")]
     public struct ColRow : IEquatable<ColRow>
     {
         public int Col { get; }
