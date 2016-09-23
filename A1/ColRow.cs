@@ -17,6 +17,7 @@
 namespace A1
 {
     using System;
+    using System.Diagnostics.Contracts;
     using System.Globalization;
 
     public struct ColRow : IEquatable<ColRow>
@@ -49,6 +50,13 @@ namespace A1
             && Row >= a.Row
             && Col <= b.Col
             && Row <= b.Row;
+
+        [Pure]
+        public T OffsetTo<T>(ColRow other, Func<int, int, T> selector)
+        {
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+            return selector(other.Col - Col, other.Row - Row);
+        }
 
         public static bool operator ==(ColRow left, ColRow right) => left.Equals(right);
         public static bool operator !=(ColRow left, ColRow right) => !left.Equals(right);

@@ -16,6 +16,7 @@
 
 namespace A1.Tests
 {
+    using System;
     using Xunit;
 
     public class ColRowTests
@@ -56,6 +57,33 @@ namespace A1.Tests
         public void InEquality()
         {
             Assert.False(new ColRow(12, 34).Equals(new ColRow(34, 12)));
+        }
+
+        [Fact]
+        public void OffsetToWithNullSelectorThrows()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() => ColRow.Zero.OffsetTo<object>(ColRow.Zero, null));
+            Assert.Equal("selector", e.ParamName);
+        }
+
+        [Theory]
+        [InlineData( 0,  0,  0,  0,   0,   0)]
+        [InlineData( 1,  1,  1,  1,   0,   0)]
+        [InlineData( 0,  0,  1,  1,   1,   1)]
+        [InlineData( 0,  0,  2,  2,   2,   2)]
+        [InlineData( 1,  1,  2,  2,   1,   1)]
+        [InlineData( 1,  1,  3,  3,   2,   2)]
+        [InlineData(12, 34, 56, 78,  44,  44)]
+        [InlineData(78, 56, 34, 12, -44, -44)]
+        [InlineData(17,  5, 19, 71,   2,  66)]
+        [InlineData(17, 91,  5, 71, -12, -20)]
+        public void OffsetTo(int c1, int r1, int c2, int r2, int x, int y)
+        {
+            var cr1 = new ColRow(c1, r1);
+            var cr2 = new ColRow(c2, r2);
+            var offset = cr1.OffsetTo(cr2, (dx, dy) => new { X = dx, Y = dy });
+            Assert.Equal(x, offset.X);
+            Assert.Equal(y, offset.Y);
         }
     }
 }

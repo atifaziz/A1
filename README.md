@@ -71,6 +71,15 @@ Console.WriteLine(xy.IsContainedIn(lt, rbSmall)); // False
 Console.WriteLine(xy.IsContainedIn(lt, rbLarge)); // True
 ```
 
+Determine offset to another `ColRow`:
+
+```c#
+var a = new ColRow(17, 5);
+var b = new ColRow(19, 71);
+var o = a.OffsetTo(b, (x, y) => new { X = x, Y = y });
+Console.WriteLine(o.ToString()); // { X = 2, Y = 66 }
+```
+
 Initializing an `Address` and formatting:
 
 
