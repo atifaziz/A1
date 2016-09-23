@@ -81,9 +81,46 @@ namespace A1.Tests
         {
             var cr1 = new ColRow(c1, r1);
             var cr2 = new ColRow(c2, r2);
-            var offset = cr1.OffsetTo(cr2, (dx, dy) => new { X = dx, Y = dy });
-            Assert.Equal(x, offset.X);
-            Assert.Equal(y, offset.Y);
+            var offset = cr1.OffsetTo(cr2, (dx, dy) => new { Width = dx, Height = dy });
+            Assert.Equal(x, offset.Width);
+            Assert.Equal(y, offset.Height);
+        }
+
+        [Fact]
+        public void SizeWithNullSelectorThrows()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() => ColRow.Zero.Size<object>(ColRow.Zero, null));
+            Assert.Equal("selector", e.ParamName);
+        }
+
+        [Theory]
+        [InlineData( 0,  0,  0,  0,   1,   1)]
+        [InlineData( 1,  1,  1,  1,   1,   1)]
+        [InlineData( 0,  0,  1,  1,   2,   2)]
+        [InlineData( 0,  0,  2,  2,   3,   3)]
+        [InlineData( 1,  1,  2,  2,   2,   2)]
+        [InlineData( 1,  1,  3,  3,   3,   3)]
+        [InlineData(12, 34, 56, 78,  45,  45)]
+        [InlineData(17,  5, 19, 71,   3,  67)]
+        public void Size(int c1, int r1, int c2, int r2, int width, int height)
+        {
+            var cr1 = new ColRow(c1, r1);
+            var cr2 = new ColRow(c2, r2);
+            var offset = cr1.Size(cr2, (w, h) => new { Width = w, Height = h });
+            Assert.Equal(width, offset.Width);
+            Assert.Equal(height, offset.Height);
+        }
+
+        [Theory]
+        [InlineData(1, 0, 0, 1)] // -width, +height
+        [InlineData(0, 1, 1, 0)] // +width, -height
+        [InlineData(1, 1, 0, 0)] // -width, -height
+        public void SizeCannotBeNegative(int c1, int r1, int c2, int r2)
+        {
+            var cr1 = new ColRow(c1, r1);
+            var cr2 = new ColRow(c2, r2);
+            var e = Assert.Throws<ArgumentException>(() => cr1.Size(cr2, (w, h) => new { Width = w, Height = h }));
+            Assert.Equal("other", e.ParamName);
         }
     }
 }

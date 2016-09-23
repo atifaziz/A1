@@ -80,6 +80,15 @@ var o = a.OffsetTo(b, (x, y) => new { X = x, Y = y });
 Console.WriteLine(o.ToString()); // { X = 2, Y = 66 }
 ```
 
+Determine size of the box formed by two `ColRow` values:
+
+```c#
+var a = new ColRow(17, 5);
+var b = new ColRow(19, 71);
+var s = a.Size(b, (w, h) => new { Width = w, Height = h });
+Console.WriteLine(s.ToString()); // { X = 2, Y = 66 }
+```
+
 Initializing an `Address` and formatting:
 
 

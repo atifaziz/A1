@@ -58,6 +58,17 @@ namespace A1
             return selector(other.Col - Col, other.Row - Row);
         }
 
+        [Pure]
+        public T Size<T>(ColRow other, Func<int, int, T> selector)
+        {
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+            var x = other.Col - Col;
+            if (x < 0) throw new ArgumentException($"Resulting width between {this} and {other} would be negative.", nameof(other));
+            var y = other.Row - Row;
+            if (y < 0) throw new ArgumentException($"Resulting height between {this} and {other} would be negative.", nameof(other));
+            return selector(x + 1, y + 1);
+        }
+
         public static bool operator ==(ColRow left, ColRow right) => left.Equals(right);
         public static bool operator !=(ColRow left, ColRow right) => !left.Equals(right);
     }
