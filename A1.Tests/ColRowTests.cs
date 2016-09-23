@@ -28,6 +28,13 @@ namespace A1.Tests
             Assert.Equal(0, colrow.Row);
         }
 
+        [Fact]
+        public void Zero()
+        {
+            Assert.Equal(0, ColRow.Zero.Col);
+            Assert.Equal(0, ColRow.Zero.Row);
+        }
+
         [Theory]
         [InlineData(12, 34)]
         [InlineData(45, 67)]

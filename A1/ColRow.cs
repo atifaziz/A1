@@ -21,6 +21,8 @@ namespace A1
 
     public struct ColRow : IEquatable<ColRow>
     {
+        public static readonly ColRow Zero = new ColRow(0, 0);
+
         public int Col { get; }
         public int Row { get; }
 
