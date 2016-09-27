@@ -50,7 +50,7 @@ namespace A1.Tests
         public static IEnumerable<object[]> NonAlphaChars =>
             from ch in Enumerable.Range(char.MinValue, char.MaxValue)
             select (char) ch into ch
-            where ch < 'A' || ch > 'Z'
+            where (ch < 'A' || ch > 'Z') && (ch < 'a' || ch > 'z')
             select new object[] { ch };
 
 
