@@ -33,6 +33,8 @@ namespace A1
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var ch in alpha)
             {
+                if (ch < 'A' || ch > 'Z')
+                    throw new ArgumentException("Input string may be only composed of characters from A through to Z.", nameof(alpha));
                 var n = ch - 'A' + 1;
                 c1 = c1 * m + n;
                 m = 26;

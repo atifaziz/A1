@@ -1,4 +1,4 @@
-﻿#region Copyright (c) 2016 Atif Aziz. All rights reserved.
+#region Copyright (c) 2016 Atif Aziz. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ namespace A1.Tests
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using Xunit;
 
@@ -37,6 +38,21 @@ namespace A1.Tests
         {
             Assert.Equal(num, A1Convert.AlphaColumnNumber(alpha));
         }
+
+        [Theory]
+        [MemberData(nameof(NonAlphaChars))]
+        public void AlphaColumnNumberThrowsForNonAlphaChar(char ch)
+        {
+            var e = Assert.Throws<ArgumentException>(() => A1Convert.AlphaColumnNumber("A" + ch + "C"));
+            Assert.Equal("alpha", e.ParamName);
+        }
+
+        public static IEnumerable<object[]> NonAlphaChars =>
+            from ch in Enumerable.Range(char.MinValue, char.MaxValue)
+            select (char) ch into ch
+            where ch < 'A' || ch > 'Z'
+            select new object[] { ch };
+
 
         [Theory]
         [InlineData(-2)]
