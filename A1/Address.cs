@@ -86,7 +86,8 @@ namespace A1
             var abscol = s[0] == '$';
             var i = abscol ? 1 : 0;
             var ii = i;
-            while (ii < s.Length && s[ii] >= 'A' && s[ii] <= 'Z')
+            int ch;
+            while (ii < s.Length && (ch = s[ii] & ~32) >= 'A' && ch <= 'Z')
                 ii++;
             var len = ii - i;
             if (len == 0)

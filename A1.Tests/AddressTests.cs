@@ -16,6 +16,7 @@
 
 namespace A1.Tests
 {
+    using System;
     using Xunit;
 
     public class AddressTests
@@ -84,6 +85,21 @@ namespace A1.Tests
         [InlineData("$GHI43",  true , 4948, false, 42)]
         [InlineData("GHI$43",  false, 4948, true , 42)]
         [InlineData("$GHI$43", true , 4948, true , 42)]
+        [InlineData("a1"    ,  false,    0, false,  0)]
+        [InlineData("b1"    ,  false,    1, false,  0)]
+        [InlineData("c1"    ,  false,    2, false,  0)]
+        [InlineData("a5"    ,  false,    0, false,  4)]
+        [InlineData("b5"    ,  false,    1, false,  4)]
+        [InlineData("c5"    ,  false,    2, false,  4)]
+        [InlineData("aa1"   ,  false,   26, false,  0)]
+        [InlineData("ab2"   ,  false,   27, false,  1)]
+        [InlineData("ac3"   ,  false,   28, false,  2)]
+        [InlineData("abc43" ,  false,  730, false, 42)]
+        [InlineData("def43" ,  false, 2839, false, 42)]
+        [InlineData("ghi43" ,  false, 4948, false, 42)]
+        [InlineData("$ghi43",  true , 4948, false, 42)]
+        [InlineData("ghi$43",  false, 4948, true , 42)]
+        [InlineData("$ghi$43", true , 4948, true , 42)]
         public void ParseA1(string s, bool isColAbs, int col, bool isRowAbs, int row)
         {
             var address = Address.ParseA1(s);
@@ -91,7 +107,7 @@ namespace A1.Tests
             Assert.Equal(col, address.Col);
             Assert.Equal(isRowAbs, address.IsRowAbs);
             Assert.Equal(row, address.Row);
-            Assert.Equal(s, address.ToString());
+            Assert.Equal(s, address.ToString(), StringComparer.OrdinalIgnoreCase);
         }
 
         [Theory]
