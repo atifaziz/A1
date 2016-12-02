@@ -17,6 +17,7 @@
 namespace A1.Tests
 {
     using System;
+    using System.Collections.Generic;
     using Xunit;
 
     public class AddressTests
@@ -117,16 +118,34 @@ namespace A1.Tests
             Assert.Equal(s, address.ToString(), StringComparer.OrdinalIgnoreCase);
         }
 
+        public static IEnumerable<object[]> BadA1Data => new[]
+        {
+            Data(""    ),
+            Data("Al"  ),
+            Data("AB1C"),
+            Data("F00" ),
+            Data("F-1" ),
+            Data("FOO" ),
+        };
+
         [Theory]
-        [InlineData("")]
-        [InlineData("Al")]
-        [InlineData("AB1C")]
-        [InlineData("F00")]
-        [InlineData("F-1")]
-        [InlineData("FOO")]
+        [MemberData(nameof(BadA1Data))]
         public void ParseA1ThrowsFormatException(string s)
         {
             Assert.Throws<FormatException>(() => Address.ParseA1(s));
+        }
+
+        [Theory]
+        [MemberData(nameof(BadA1Data))]
+        public void TryParseA1(string s)
+        {
+            Assert.Null(Address.TryParseA1(s));
+        }
+
+        [Fact]
+        public void TryParseA1AllowsNull()
+        {
+            Assert.Null(Address.TryParseA1(null));
         }
 
         [Theory]
@@ -192,5 +211,7 @@ namespace A1.Tests
         {
             Assert.False(new Address(false, 12, true, 34).Equals(new Address(true, 12, false, 34)));
         }
+
+        static object[] Data(params object[] data) => data;
     }
 }

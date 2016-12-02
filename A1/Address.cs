@@ -82,8 +82,16 @@ namespace A1
         public static Address ParseA1(string s)
         {
             if (s == null) throw new ArgumentNullException(nameof(s));
-            if (s.Length == 0)
-                goto error;
+            var result = TryParseA1(s);
+            if (result == null)
+                throw new FormatException($"'{s}' is not a valid A1 cell reference style.");
+            return result.Value;
+        }
+
+        public static Address? TryParseA1(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+                return null;
             var abscol = s[0] == '$';
             var i = abscol ? 1 : 0;
             var ii = i;
@@ -92,19 +100,18 @@ namespace A1
                 ii++;
             var len = ii - i;
             if (len == 0)
-                goto error;
-            var col = A1Convert.AlphaColumnNumber(s.Substring(i, len));
+                return null;
+            var col = A1Convert.TryAlphaColumnNumber(s.Substring(i, len)) ?? 0;
+            if (col == 0)
+                return null;
             int row;
             if (ii == s.Length)
-                goto error;
+                return null;
             var absrow = s[ii] == '$';
-            if (!int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out row))
-                goto error;
-            if (row < 1)
-                goto error;
-            return new Address(abscol, col - 1, absrow, row - 1);
-            error:
-            throw new FormatException($"'{s}' is not a valid A1 cell reference style.");
+            return int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out row)
+                && row >= 1
+                 ? new Address(abscol, col - 1, absrow, row - 1)
+                 : (Address?) null;
         }
     }
 }
