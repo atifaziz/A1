@@ -63,6 +63,7 @@ namespace A1
 
         static string FormatAbs(bool abs) => abs ? "$" : null;
 
+        [Obsolete("This method will be removed in the next version.")]
         public static Tuple<Address, Address> ParseA1Range(string range) =>
             ParseA1Range(range, Tuple.Create);
 
