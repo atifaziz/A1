@@ -28,6 +28,16 @@ namespace A1
         public static int AlphaColumnNumber(string alpha)
         {
             if (alpha == null) throw new ArgumentNullException(nameof(alpha));
+            var result = TryAlphaColumnNumber(alpha);
+            if (result == null)
+                throw new ArgumentException("Input string may be only composed of characters from A through to Z.", nameof(alpha));
+            return result.Value;
+        }
+
+        public static int? TryAlphaColumnNumber(string alpha)
+        {
+            if (string.IsNullOrEmpty(alpha))
+                return null;
             var c1 = 0;
             var m = 1;
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
@@ -35,7 +45,7 @@ namespace A1
             {
                 var ch = ach & ~32;
                 if (ch < 'A' || ch > 'Z')
-                    throw new ArgumentException("Input string may be only composed of characters from A through to Z.", nameof(alpha));
+                    return null;
                 var n = ch - 'A' + 1;
                 c1 = c1 * m + n;
                 m = 26;

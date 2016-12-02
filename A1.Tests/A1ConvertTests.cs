@@ -40,6 +40,17 @@ namespace A1.Tests
         }
 
         [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("?")]
+        [InlineData("A?C")]
+        [InlineData("AB?")]
+        public void TryAlphaColumnNumber(string alpha)
+        {
+            Assert.Null(A1Convert.TryAlphaColumnNumber(alpha));
+        }
+
+        [Theory]
         [MemberData(nameof(NonAlphaChars))]
         public void AlphaColumnNumberThrowsForNonAlphaChar(char ch)
         {
