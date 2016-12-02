@@ -66,34 +66,32 @@ namespace A1
         public static Tuple<Address, Address> ParseA1Range(string range) =>
             ParseA1Range(range, Tuple.Create);
 
-        // TODO type seletor -> selector
-
-        public static T ParseA1Range<T>(string range, Func<Address, Address, T> seletor) =>
+        public static T ParseA1Range<T>(string range, Func<Address, Address, T> selector) =>
             TryParseA1Range(range, (r, fs, fa, ts, ta) =>
             {
                 if (fa == null || ta == null)
                     throw new FormatException($"'{(fa == null ? fs : ts)}' is not a valid A1 cell reference style in the range '{r}'.");
-                return seletor(fa.Value, ta.Value);
+                return selector(fa.Value, ta.Value);
             });
 
-        public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> seletor) =>
+        public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector) =>
             TryParseA1Range(range, (r, fs, fa, ts, ta) => fa == null || ta == null
                                                         ? error
-                                                        : seletor(fa.Value, ta.Value));
+                                                        : selector(fa.Value, ta.Value));
 
-        static T TryParseA1Range<T>(string range, Func<string, string, Address?, string, Address?, T> seletor)
+        static T TryParseA1Range<T>(string range, Func<string, string, Address?, string, Address?, T> selector)
         {
             var index = range.IndexOf(':');
             if (index < 0)
             {
                 var r = TryParseA1(range);
-                return seletor(range, range, r, range, r);
+                return selector(range, range, r, range, r);
             }
             var fs = range.Substring(0, index);
             var from = TryParseA1(fs);
             var ts = range.Substring(index + 1);
             var to = TryParseA1(ts);
-            return seletor(range, fs, from, ts, to);
+            return selector(range, fs, from, ts, to);
         }
 
         public static Address ParseA1(string s)
