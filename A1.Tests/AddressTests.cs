@@ -69,6 +69,13 @@ namespace A1.Tests
             Assert.Equal(s, address.ToString());
         }
 
+        [Fact]
+        public void ParseA1ForbidsNull()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() => Address.ParseA1(null));
+            Assert.Equal("s", e.ParamName);
+        }
+
         [Theory]
         [InlineData("A1"    ,  false,    0, false,  0)]
         [InlineData("B1"    ,  false,    1, false,  0)]

@@ -81,6 +81,7 @@ namespace A1
 
         public static Address ParseA1(string s)
         {
+            if (s == null) throw new ArgumentNullException(nameof(s));
             if (s.Length == 0)
                 goto error;
             var abscol = s[0] == '$';
