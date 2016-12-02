@@ -66,17 +66,34 @@ namespace A1
         public static Tuple<Address, Address> ParseA1Range(string range) =>
             ParseA1Range(range, Tuple.Create);
 
-        public static T ParseA1Range<T>(string range, Func<Address, Address, T> seletor)
+        // TODO type seletor -> selector
+
+        public static T ParseA1Range<T>(string range, Func<Address, Address, T> seletor) =>
+            TryParseA1Range(range, (r, fs, fa, ts, ta) =>
+            {
+                if (fa == null || ta == null)
+                    throw new FormatException($"'{(fa == null ? fs : ts)}' is not a valid A1 cell reference style in the range '{r}'.");
+                return seletor(fa.Value, ta.Value);
+            });
+
+        public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> seletor) =>
+            TryParseA1Range(range, (r, fs, fa, ts, ta) => fa == null || ta == null
+                                                        ? error
+                                                        : seletor(fa.Value, ta.Value));
+
+        static T TryParseA1Range<T>(string range, Func<string, string, Address?, string, Address?, T> seletor)
         {
             var index = range.IndexOf(':');
             if (index < 0)
             {
-                var r = ParseA1(range);
-                return seletor(r, r);
+                var r = TryParseA1(range);
+                return seletor(range, range, r, range, r);
             }
-            var from = ParseA1(range.Substring(0, index));
-            var to = ParseA1(range.Substring(index + 1));
-            return seletor(from, to);
+            var fs = range.Substring(0, index);
+            var from = TryParseA1(fs);
+            var ts = range.Substring(index + 1);
+            var to = TryParseA1(ts);
+            return seletor(range, fs, from, ts, to);
         }
 
         public static Address ParseA1(string s)
