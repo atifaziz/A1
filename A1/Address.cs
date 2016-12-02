@@ -100,6 +100,8 @@ namespace A1
             var absrow = s[ii] == '$';
             if (!int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out row))
                 goto error;
+            if (row < 1)
+                goto error;
             return new Address(abscol, col - 1, absrow, row - 1);
             error:
             throw new FormatException($"'{s}' is not a valid A1 cell reference style.");

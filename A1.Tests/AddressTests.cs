@@ -118,6 +118,18 @@ namespace A1.Tests
         }
 
         [Theory]
+        [InlineData("")]
+        [InlineData("Al")]
+        [InlineData("AB1C")]
+        [InlineData("F00")]
+        [InlineData("F-1")]
+        [InlineData("FOO")]
+        public void ParseA1ThrowsFormatException(string s)
+        {
+            Assert.Throws<FormatException>(() => Address.ParseA1(s));
+        }
+
+        [Theory]
         [InlineData("A1")]
         [InlineData("$A1")]
         [InlineData("A$1")]
