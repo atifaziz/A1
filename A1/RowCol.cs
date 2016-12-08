@@ -19,72 +19,14 @@ namespace A1
     using System;
     using System.Diagnostics.Contracts;
 
-    public struct Col : IEquatable<Col>, IComparable<Col>
+    public partial struct Col
     {
-        public static readonly Col Zero = default(Col);
-
-        readonly int _x;
-
-        public Col(int x)
-        {
-            if (x < 0) throw new ArgumentOutOfRangeException(nameof(x));
-            _x = x;
-        }
-
-        public bool Equals(Col other) => _x == other._x;
-        public override bool Equals(object obj) => obj is Col && Equals((Col) obj);
-        public override int GetHashCode() => _x;
-
-        public int CompareTo(Col other) => _x.CompareTo(other._x);
-
-        public override string ToString() => _x.ToString();
-
-        public static Col operator +(Col col, int x) => new Col(col._x + x);
-        public static Col operator -(Col col, int x) => new Col(col._x - x);
-        public static Col operator ++(Col col) => col + 1;
-        public static Col operator --(Col col) => col - 1;
-
         public static RowCol operator +(Col col, Row row) => new RowCol(row, col);
-
-        public static bool operator ==(Col left, Col right) => left.Equals(right);
-        public static bool operator !=(Col left, Col right) => !left.Equals(right);
-
-        public static explicit operator Col(int value) => new Col(value);
-        public static implicit operator int(Col col) => col._x;
     }
 
-    public struct Row : IEquatable<Row>, IComparable<Row>
+    public partial struct Row
     {
-        public static readonly Row Zero = default(Row);
-
-        readonly int _y;
-
-        public Row(int y)
-        {
-            if (y < 0) throw new ArgumentOutOfRangeException(nameof(y));
-            _y = y;
-        }
-
-        public bool Equals(Row other) => _y == other._y;
-        public override bool Equals(object obj) => obj is Row && Equals((Row) obj);
-        public override int GetHashCode() => _y;
-
-        public int CompareTo(Row other) => _y.CompareTo(other._y);
-
-        public override string ToString() => _y.ToString();
-
-        public static Row operator +(Row row, int y) => new Row(row._y + y);
-        public static Row operator -(Row row, int y) => new Row(row._y - y);
-        public static Row operator ++(Row row) => row + 1;
-        public static Row operator --(Row row) => row - 1;
-
         public static RowCol operator +(Row row, Col col) => new RowCol(row, col);
-
-        public static bool operator ==(Row left, Row right) => left.Equals(right);
-        public static bool operator !=(Row left, Row right) => !left.Equals(right);
-
-        public static explicit operator Row(int value) => new Row(value);
-        public static implicit operator int(Row row) => row._y;
     }
 
     public struct RowCol : IEquatable<RowCol>
