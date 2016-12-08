@@ -66,7 +66,7 @@ a pair of `ColRow` values (left-top then right-bottom):
 var xy = new ColRow(12, 34);
 var lt = new ColRow(0, 0);
 var rbSmall = new ColRow(10, 10);
-var rbLarge = new ColRow(10, 10);
+var rbLarge = new ColRow(100, 100);
 Console.WriteLine(xy.IsContainedIn(lt, rbSmall)); // False
 Console.WriteLine(xy.IsContainedIn(lt, rbLarge)); // True
 ```
@@ -86,7 +86,7 @@ Determine size of the box formed by two `ColRow` values:
 var a = new ColRow(17, 5);
 var b = new ColRow(19, 71);
 var s = a.Size(b, (w, h) => new { Width = w, Height = h });
-Console.WriteLine(s.ToString()); // { X = 2, Y = 66 }
+Console.WriteLine(s.ToString()); // { X = 3, Y = 67 }
 ```
 
 Initializing an `Address` and formatting:
@@ -107,7 +107,7 @@ Parsing an A1-style reference into an `Address`:
 ```c#
 var a = Address.ParseA1("M$35");
 Console.WriteLine(a);           // M$35
-Console.WriteLine(a.IsColAbs);  // True
+Console.WriteLine(a.IsColAbs);  // False
 Console.WriteLine(a.Col);       // 12
 Console.WriteLine(a.IsRowAbs);  // True
 Console.WriteLine(a.Row);       // 34
