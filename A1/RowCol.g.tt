@@ -1,8 +1,6 @@
 <#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ output extension=".cs" #>
 <#@ assembly name="System.Core" #>
-<#@ import namespace="System.Globalization" #>
-<#@ import namespace="System.Linq" #>
 #region Copyright (c) 2016 Atif Aziz. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
