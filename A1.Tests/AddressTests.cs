@@ -36,18 +36,18 @@ namespace A1.Tests
         [Fact]
         public void InitRelative()
         {
-            var address = new Address(12, 34);
-            Assert.Equal(false, address.IsColAbs);
-            Assert.Equal(12, address.Col);
+            var address = new Address((Row) 34, (Col) 12);
             Assert.Equal(false, address.IsRowAbs);
             Assert.Equal(34, address.Row);
+            Assert.Equal(false, address.IsColAbs);
+            Assert.Equal(12, address.Col);
             Assert.Equal("M35", address.ToString());
         }
 
         [Fact]
         public void InitAbsolute()
         {
-            var address = new Address(12, 34, true);
+            var address = new Address((Row) 34, (Col) 12, true);
             Assert.Equal(true, address.IsColAbs);
             Assert.Equal(12, address.Col);
             Assert.Equal(true, address.IsRowAbs);
@@ -62,7 +62,7 @@ namespace A1.Tests
         [InlineData(true , 12, true , 34, "$M$35")]
         public void Init(bool isColAbs, int col, bool isRowAbs, int row, string s)
         {
-            var address = new Address(isColAbs, col, isRowAbs, row);
+            var address = new Address(isRowAbs, (Row) row, isColAbs, (Col) col);
             Assert.Equal(isColAbs, address.IsColAbs);
             Assert.Equal(col, address.Col);
             Assert.Equal(isRowAbs, address.IsRowAbs);
@@ -111,10 +111,10 @@ namespace A1.Tests
         public void ParseA1(string s, bool isColAbs, int col, bool isRowAbs, int row)
         {
             var address = Address.ParseA1(s);
-            Assert.Equal(isColAbs, address.IsColAbs);
-            Assert.Equal(col, address.Col);
             Assert.Equal(isRowAbs, address.IsRowAbs);
             Assert.Equal(row, address.Row);
+            Assert.Equal(isColAbs, address.IsColAbs);
+            Assert.Equal(col, address.Col);
             Assert.Equal(s, address.ToString(), StringComparer.OrdinalIgnoreCase);
         }
 
@@ -159,7 +159,7 @@ namespace A1.Tests
             var absolute = address.MakeAbsolute();
             Assert.Equal(true, absolute.IsColAbs);
             Assert.Equal(true, absolute.IsRowAbs);
-            Assert.Equal(absolute.ColRow, address.ColRow);
+            Assert.Equal(absolute.RowCol, address.RowCol);
         }
 
         [Theory]
@@ -173,43 +173,43 @@ namespace A1.Tests
             var absolute = address.MakeRelative();
             Assert.Equal(false, absolute.IsColAbs);
             Assert.Equal(false, absolute.IsRowAbs);
-            Assert.Equal(absolute.ColRow, address.ColRow);
+            Assert.Equal(absolute.RowCol, address.RowCol);
         }
 
         [Fact]
         public void EqualityWithRelativeAnchor()
         {
-            Assert.True(new Address(12, 34).Equals(new Address(12, 34)));
+            Assert.True(new Address((Row) 12, (Col) 34).Equals(new Address((Row) 12, (Col) 34)));
         }
 
         [Fact]
         public void EqualityWithAbsoluteAnchor()
         {
-            Assert.True(new Address(12, 34, true).Equals(new Address(12, 34, true)));
+            Assert.True(new Address((Row) 12, (Col) 34, true).Equals(new Address((Row) 12, (Col) 34, true)));
         }
 
         [Fact]
         public void EqualityWithMixedAnchor()
         {
-            Assert.True(new Address(true, 12, false, 34).Equals(new Address(true, 12, false, 34)));
+            Assert.True(new Address(true, (Row) 12, false, (Col) 34).Equals(new Address(true, (Row) 12, false, (Col) 34)));
         }
 
         [Fact]
         public void InequalityWithRelativeAnchor()
         {
-            Assert.False(new Address(12, 34).Equals(new Address(34, 12)));
+            Assert.False(new Address((Row) 12, (Col) 34).Equals(new Address((Row) 34, (Col) 12)));
         }
 
         [Fact]
         public void InequalityWithAbsoluteAnchor()
         {
-            Assert.False(new Address(12, 34).Equals(new Address(12, 34, true)));
+            Assert.False(new Address((Row) 12, (Col) 34).Equals(new Address((Row) 12, (Col) 34, true)));
         }
 
         [Fact]
         public void InequalityWithMixedAnchor()
         {
-            Assert.False(new Address(false, 12, true, 34).Equals(new Address(true, 12, false, 34)));
+            Assert.False(new Address(false, (Row) 12, true, (Col) 34).Equals(new Address(true, (Row) 12, false, (Col) 34)));
         }
 
         static object[] Data(params object[] data) => data;

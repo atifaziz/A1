@@ -19,12 +19,12 @@ namespace A1.Tests
     using System;
     using Xunit;
 
-    public class ColRowTests
+    public class RowColTests
     {
         [Fact]
         public void InitEmpty()
         {
-            var colrow = new ColRow();
+            var colrow = new RowCol();
             Assert.Equal(0, colrow.Col);
             Assert.Equal(0, colrow.Row);
         }
@@ -32,17 +32,17 @@ namespace A1.Tests
         [Fact]
         public void Zero()
         {
-            Assert.Equal(0, ColRow.Zero.Col);
-            Assert.Equal(0, ColRow.Zero.Row);
+            Assert.Equal(0, RowCol.Zero.Col);
+            Assert.Equal(0, RowCol.Zero.Row);
         }
 
         [Theory]
         [InlineData(12, 34)]
         [InlineData(45, 67)]
         [InlineData(67, 89)]
-        public void Init(int col, int row)
+        public void Init(int row, int col)
         {
-            var colrow = new ColRow(col, row);
+            var colrow = new RowCol((Row) row, (Col) col);
             Assert.Equal(col, colrow.Col);
             Assert.Equal(row, colrow.Row);
         }
@@ -50,19 +50,19 @@ namespace A1.Tests
         [Fact]
         public void Equality()
         {
-            Assert.True(new ColRow(12, 34).Equals(new ColRow(12, 34)));
+            Assert.True(new RowCol((Row) 12, (Col) 34).Equals(new RowCol((Row) 12, (Col) 34)));
         }
 
         [Fact]
         public void InEquality()
         {
-            Assert.False(new ColRow(12, 34).Equals(new ColRow(34, 12)));
+            Assert.False(new RowCol((Row) 12, (Col) 34).Equals(new RowCol((Row) 34, (Col) 12)));
         }
 
         [Fact]
         public void OffsetToWithNullSelectorThrows()
         {
-            var e = Assert.Throws<ArgumentNullException>(() => ColRow.Zero.OffsetTo<object>(ColRow.Zero, null));
+            var e = Assert.Throws<ArgumentNullException>(() => RowCol.Zero.OffsetTo<object>(RowCol.Zero, null));
             Assert.Equal("selector", e.ParamName);
         }
 
@@ -79,17 +79,17 @@ namespace A1.Tests
         [InlineData(17, 91,  5, 71, -12, -20)]
         public void OffsetTo(int c1, int r1, int c2, int r2, int x, int y)
         {
-            var cr1 = new ColRow(c1, r1);
-            var cr2 = new ColRow(c2, r2);
-            var offset = cr1.OffsetTo(cr2, (dx, dy) => new { Width = dx, Height = dy });
-            Assert.Equal(x, offset.Width);
+            var cr1 = new RowCol((Row) r1, (Col) c1);
+            var cr2 = new RowCol((Row) r2, (Col) c2);
+            var offset = cr1.OffsetTo(cr2, (dy, dx) => new { Height = dy, Width = dx });
             Assert.Equal(y, offset.Height);
+            Assert.Equal(x, offset.Width);
         }
 
         [Fact]
         public void SizeWithNullSelectorThrows()
         {
-            var e = Assert.Throws<ArgumentNullException>(() => ColRow.Zero.Size<object>(ColRow.Zero, null));
+            var e = Assert.Throws<ArgumentNullException>(() => RowCol.Zero.Size<object>(RowCol.Zero, null));
             Assert.Equal("selector", e.ParamName);
         }
 
@@ -104,11 +104,11 @@ namespace A1.Tests
         [InlineData(17,  5, 19, 71,   3,  67)]
         public void Size(int c1, int r1, int c2, int r2, int width, int height)
         {
-            var cr1 = new ColRow(c1, r1);
-            var cr2 = new ColRow(c2, r2);
-            var offset = cr1.Size(cr2, (w, h) => new { Width = w, Height = h });
-            Assert.Equal(width, offset.Width);
+            var cr1 = new RowCol((Row) r1, (Col) c1);
+            var cr2 = new RowCol((Row) r2, (Col) c2);
+            var offset = cr1.Size(cr2, (h, w) => new { Height = h, Width = w });
             Assert.Equal(height, offset.Height);
+            Assert.Equal(width, offset.Width);
         }
 
         [Theory]
@@ -117,9 +117,9 @@ namespace A1.Tests
         [InlineData(1, 1, 0, 0)] // -width, -height
         public void SizeCannotBeNegative(int c1, int r1, int c2, int r2)
         {
-            var cr1 = new ColRow(c1, r1);
-            var cr2 = new ColRow(c2, r2);
-            var e = Assert.Throws<ArgumentException>(() => cr1.Size(cr2, (w, h) => new { Width = w, Height = h }));
+            var cr1 = new RowCol((Row) r1, (Col) c1);
+            var cr2 = new RowCol((Row) r2, (Col) c2);
+            var e = Assert.Throws<ArgumentException>(() => cr1.Size(cr2, (h, w) => new { Height = h, Width = w }));
             Assert.Equal("other", e.ParamName);
         }
     }

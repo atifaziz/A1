@@ -21,42 +21,54 @@ namespace A1
 
     public struct Address : IEquatable<Address>
     {
-        public bool IsColAbs { get; }
         public bool IsRowAbs { get; }
-        public ColRow ColRow { get; }
-        public int Col => ColRow.Col;
-        public int Row => ColRow.Row;
+        public bool IsColAbs { get; }
+        public RowCol RowCol { get; }
+        public Row Row => RowCol.Row;
+        public Col Col => RowCol.Col;
 
-        public Address(int col, int row) :
-            this(col, row, false) {}
+        public Address(Row row, Col col) :
+            this(row, col, false) {}
 
-        public Address(int col, int row, bool isAbs) :
-            this(isAbs, col, isAbs, row) {}
+        public Address(RowCol rc) :
+            this(rc.Row, rc.Col, false) {}
 
-        public Address(bool isColAbs, int col, bool isRowAbs, int row)
+        public Address(Row row, Col col, bool isAbs) :
+            this(isAbs, row, isAbs, col) {}
+
+        public Address(Col col, Row row, bool isAbs) :
+            this(row, col, isAbs) {}
+
+        public Address(RowCol rc, bool isAbs) :
+            this(isAbs, rc.Row, isAbs, rc.Col) {}
+
+        public Address(bool isColAbs, Col col, bool isRowAbs, Row row) :
+            this(isRowAbs, row, isColAbs, col) {}
+
+        public Address(bool isRowAbs, Row row, bool isColAbs, Col col)
         {
             IsColAbs = isColAbs;
             IsRowAbs = isRowAbs;
-            ColRow = new ColRow(col, row);
+            RowCol = new RowCol(row, col);
         }
 
         public bool Equals(Address other) =>
                IsColAbs == other.IsColAbs
             && IsRowAbs == other.IsRowAbs
-            && ColRow.Equals(other.ColRow);
+            && RowCol.Equals(other.RowCol);
 
         public override bool Equals(object obj) =>
             obj is Address && Equals((Address) obj);
 
         public override int GetHashCode() =>
-            unchecked ((((IsColAbs.GetHashCode() * 397) ^ IsRowAbs.GetHashCode()) * 397) ^ ColRow.GetHashCode());
+            unchecked ((((IsColAbs.GetHashCode() * 397) ^ IsRowAbs.GetHashCode()) * 397) ^ RowCol.GetHashCode());
 
         public override string ToString() =>
               FormatAbs(IsColAbs) + A1Convert.NumberColumnAlpha(Col + 1)
-            + FormatAbs(IsRowAbs) + (Row + 1).ToString(CultureInfo.InvariantCulture);
+            + FormatAbs(IsRowAbs) + (Row + 1);
 
-        public Address MakeAbsolute() => new Address(Col, Row, true);
-        public Address MakeRelative() => new Address(Col, Row);
+        public Address MakeAbsolute() => new Address(Row, Col, true);
+        public Address MakeRelative() => new Address(Row, Col);
 
         public static bool operator ==(Address left, Address right) => left.Equals(right);
         public static bool operator !=(Address left, Address right) => !left.Equals(right);
@@ -126,7 +138,7 @@ namespace A1
             var absrow = s[ii] == '$';
             return int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out row)
                 && row >= 1
-                 ? new Address(abscol, col - 1, absrow, row - 1)
+                 ? new Address(absrow, new Row(row - 1), abscol, new Col(col - 1))
                  : (Address?) null;
         }
     }
