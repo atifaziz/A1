@@ -36,6 +36,7 @@ namespace A1
         public Row Row { get; }
         public Col Col { get; }
 
+        public RowCol(Col col, Row row) : this(row, col) {}
         public RowCol(Row row, Col col) { Col = col; Row = row; }
 
         public bool Equals(RowCol other) => Col == other.Col && Row == other.Row;
