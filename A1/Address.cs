@@ -75,9 +75,8 @@ namespace A1
 
         static string FormatAbs(bool abs) => abs ? "$" : null;
 
-        [Obsolete("This method will be removed in the next version.")]
-        public static Tuple<Address, Address> ParseA1Range(string range) =>
-            ParseA1Range(range, Tuple.Create);
+        public static ValueTuple<Address, Address> ParseA1Range(string range) =>
+            ParseA1Range(range, ValueTuple.Create);
 
         public static T ParseA1Range<T>(string range, Func<Address, Address, T> selector) =>
             TryParseA1Range(range, (r, fs, fa, ts, ta) =>
@@ -86,6 +85,10 @@ namespace A1
                     throw new FormatException($"'{(fa == null ? fs : ts)}' is not a valid A1 cell reference style in the range '{r}'.");
                 return selector(fa.Value, ta.Value);
             });
+
+        public static ValueTuple<Address, Address>? TryParseA1Range(string range) =>
+            TryParseA1Range(range, (ValueTuple<Address, Address>?) null,
+                                   (from, to) => ValueTuple.Create(from, to));
 
         public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector) =>
             TryParseA1Range(range, (r, fs, fa, ts, ta) => fa == null || ta == null

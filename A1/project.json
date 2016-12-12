@@ -22,8 +22,9 @@
   "frameworks": {
     "netstandard1.0": {
       "dependencies": {
-        "System.Globalization": "4.0.11",
-        "System.Diagnostics.Contracts":  "4.0.1"
+        "System.Globalization": "4.3.0",
+        "System.Diagnostics.Contracts": "4.0.1",
+        "System.ValueTuple": "4.3.0"
       }
     }
   }

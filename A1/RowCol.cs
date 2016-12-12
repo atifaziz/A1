@@ -55,12 +55,18 @@ namespace A1
             && Col <= b.Col
             && Row <= b.Row;
 
+        public ValueTuple<int, int> OffsetTo(RowCol other) =>
+            OffsetTo(other, ValueTuple.Create);
+
         [Pure]
         public T OffsetTo<T>(RowCol other, Func<int, int, T> selector)
         {
             if (selector == null) throw new ArgumentNullException(nameof(selector));
             return selector((int) other.Row - Row, (int) other.Col - Col);
         }
+
+        public ValueTuple<int, int> Size(RowCol other) =>
+            Size(other, ValueTuple.Create);
 
         [Pure]
         public T Size<T>(RowCol other, Func<int, int, T> selector)
