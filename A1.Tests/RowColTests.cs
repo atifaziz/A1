@@ -25,15 +25,15 @@ namespace A1.Tests
         public void InitEmpty()
         {
             var colrow = new RowCol();
-            Assert.Equal(0, colrow.Col);
-            Assert.Equal(0, colrow.Row);
+            Assert.Equal(1, colrow.Col);
+            Assert.Equal(1, colrow.Row);
         }
 
         [Fact]
-        public void Zero()
+        public void TopLeft()
         {
-            Assert.Equal(0, RowCol.Zero.Col);
-            Assert.Equal(0, RowCol.Zero.Row);
+            Assert.Equal(1, RowCol.TopLeft.Col);
+            Assert.Equal(1, RowCol.TopLeft.Row);
         }
 
         [Theory]
@@ -62,21 +62,21 @@ namespace A1.Tests
         [Fact]
         public void OffsetToWithNullSelectorThrows()
         {
-            var e = Assert.Throws<ArgumentNullException>(() => RowCol.Zero.OffsetTo<object>(RowCol.Zero, null));
+            var e = Assert.Throws<ArgumentNullException>(() => RowCol.TopLeft.OffsetTo<object>(RowCol.TopLeft, null));
             Assert.Equal("selector", e.ParamName);
         }
 
         [Theory]
-        [InlineData( 0,  0,  0,  0,   0,   0)]
         [InlineData( 1,  1,  1,  1,   0,   0)]
-        [InlineData( 0,  0,  1,  1,   1,   1)]
-        [InlineData( 0,  0,  2,  2,   2,   2)]
+        [InlineData( 2,  2,  2,  2,   0,   0)]
         [InlineData( 1,  1,  2,  2,   1,   1)]
         [InlineData( 1,  1,  3,  3,   2,   2)]
-        [InlineData(12, 34, 56, 78,  44,  44)]
-        [InlineData(78, 56, 34, 12, -44, -44)]
-        [InlineData(17,  5, 19, 71,   2,  66)]
-        [InlineData(17, 91,  5, 71, -12, -20)]
+        [InlineData( 2,  2,  3,  3,   1,   1)]
+        [InlineData( 2,  2,  4,  4,   2,   2)]
+        [InlineData(13, 35, 57, 79,  44,  44)]
+        [InlineData(79, 57, 35, 13, -44, -44)]
+        [InlineData(18,  6, 20, 72,   2,  66)]
+        [InlineData(18, 92,  6, 72, -12, -20)]
         public void OffsetTo(int c1, int r1, int c2, int r2, int x, int y)
         {
             var cr1 = new RowCol((Row) r1, (Col) c1);
@@ -89,19 +89,19 @@ namespace A1.Tests
         [Fact]
         public void SizeWithNullSelectorThrows()
         {
-            var e = Assert.Throws<ArgumentNullException>(() => RowCol.Zero.Size<object>(RowCol.Zero, null));
+            var e = Assert.Throws<ArgumentNullException>(() => RowCol.TopLeft.Size<object>(RowCol.TopLeft, null));
             Assert.Equal("selector", e.ParamName);
         }
 
         [Theory]
-        [InlineData( 0,  0,  0,  0,   1,   1)]
         [InlineData( 1,  1,  1,  1,   1,   1)]
-        [InlineData( 0,  0,  1,  1,   2,   2)]
-        [InlineData( 0,  0,  2,  2,   3,   3)]
+        [InlineData( 2,  2,  2,  2,   1,   1)]
         [InlineData( 1,  1,  2,  2,   2,   2)]
         [InlineData( 1,  1,  3,  3,   3,   3)]
-        [InlineData(12, 34, 56, 78,  45,  45)]
-        [InlineData(17,  5, 19, 71,   3,  67)]
+        [InlineData( 2,  2,  3,  3,   2,   2)]
+        [InlineData( 2,  2,  4,  4,   3,   3)]
+        [InlineData(13, 35, 57, 79,  45,  45)]
+        [InlineData(18,  6, 20, 72,   3,  67)]
         public void Size(int c1, int r1, int c2, int r2, int width, int height)
         {
             var cr1 = new RowCol((Row) r1, (Col) c1);
@@ -112,9 +112,9 @@ namespace A1.Tests
         }
 
         [Theory]
-        [InlineData(1, 0, 0, 1)] // -width, +height
-        [InlineData(0, 1, 1, 0)] // +width, -height
-        [InlineData(1, 1, 0, 0)] // -width, -height
+        [InlineData(2, 1, 1, 2)] // -width, +height
+        [InlineData(1, 2, 2, 1)] // +width, -height
+        [InlineData(2, 2, 1, 1)] // -width, -height
         public void SizeCannotBeNegative(int c1, int r1, int c2, int r2)
         {
             var cr1 = new RowCol((Row) r1, (Col) c1);

@@ -31,7 +31,7 @@ namespace A1
 
     public struct RowCol : IEquatable<RowCol>
     {
-        public static readonly RowCol Zero = new RowCol(Row.Zero, Col.Zero);
+        public static readonly RowCol TopLeft = new RowCol(Row.First, Col.First);
 
         public Row Row { get; }
         public Col Col { get; }

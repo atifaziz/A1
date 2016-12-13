@@ -24,31 +24,34 @@
 namespace A1
 {
     using System;
-<# foreach (var e in new[] { "Row", "Col" })
+<#  foreach (var e in new[] { "Row", "Col" })
     { #>
 
     partial struct <#= e #> : IEquatable<<#= e #>>, IComparable<<#= e #>>
     {
-        public static readonly <#= e #> Zero = default(<#= e #>);
+        public static readonly <#= e #> First = default(<#= e #>);
 
-        readonly int _n;
+        public int Offset { get; }
+        int Number => Offset + 1;
+
+        public static <#= e #> FromOffset(int offset) => new <#= e #>(offset + 1);
 
         public <#= e #>(int n)
         {
-            if (n < 0) throw new ArgumentOutOfRangeException(nameof(n));
-            _n = n;
+            if (n < 1) throw new ArgumentOutOfRangeException(nameof(n));
+            Offset = n - 1;
         }
 
-        public bool Equals(<#= e #> other) => _n == other._n;
+        public bool Equals(<#= e #> other) => Offset == other.Offset;
         public override bool Equals(object obj) => obj is <#= e #> && Equals((<#= e #>) obj);
-        public override int GetHashCode() => _n;
+        public override int GetHashCode() => Offset;
 
-        public int CompareTo(<#= e #> other) => _n.CompareTo(other._n);
+        public int CompareTo(<#= e #> other) => Offset.CompareTo(other.Offset);
 
-        public override string ToString() => _n.ToString();
+        public override string ToString() => Number.ToString();
 
-        public static <#= e #> operator +(<#= e #> col, int n) => new <#= e #>(col._n + n);
-        public static <#= e #> operator -(<#= e #> col, int n) => new <#= e #>(col._n - n);
+        public static <#= e #> operator +(<#= e #> col, int n) => new <#= e #>(col.Number + n);
+        public static <#= e #> operator -(<#= e #> col, int n) => new <#= e #>(col.Number - n);
         public static <#= e #> operator ++(<#= e #> col) => col + 1;
         public static <#= e #> operator --(<#= e #> col) => col - 1;
 
@@ -56,7 +59,7 @@ namespace A1
         public static bool operator !=(<#= e #> left, <#= e #> right) => !left.Equals(right);
 
         public static explicit operator <#= e #>(int value) => new <#= e #>(value);
-        public static implicit operator int(<#= e #> col) => col._n;
+        public static implicit operator int(<#= e #> col) => col.Number;
     }
 <# } #>
 }

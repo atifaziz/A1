@@ -64,8 +64,8 @@ namespace A1
             unchecked ((((IsColAbs.GetHashCode() * 397) ^ IsRowAbs.GetHashCode()) * 397) ^ RowCol.GetHashCode());
 
         public override string ToString() =>
-              FormatAbs(IsColAbs) + A1Convert.NumberColumnAlpha(Col + 1)
-            + FormatAbs(IsRowAbs) + (Row + 1);
+              FormatAbs(IsColAbs) + A1Convert.NumberColumnAlpha(Col)
+            + FormatAbs(IsRowAbs) + Row;
 
         public Address MakeAbsolute() => new Address(Row, Col, true);
         public Address MakeRelative() => new Address(Row, Col);
@@ -138,7 +138,7 @@ namespace A1
             var absrow = s[ii] == '$';
             return int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out row)
                 && row >= 1
-                 ? new Address(absrow, new Row(row - 1), abscol, new Col(col - 1))
+                 ? new Address(absrow, new Row(row), abscol, new Col(col))
                  : (Address?) null;
         }
     }
