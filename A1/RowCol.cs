@@ -83,5 +83,8 @@ namespace A1
         public static bool operator !=(RowCol left, RowCol right) => !left.Equals(right);
 
         public void Deconstruct(out Row row, out Col col) { row = Row; col = Col; }
+
+        public static implicit operator ValueTuple<Row, Col>(RowCol input)
+            => ValueTuple.Create(input.Row, input.Col);
     }
 }
