@@ -144,5 +144,7 @@ namespace A1
                  ? new Address(absrow, new Row(row), abscol, new Col(col))
                  : (Address?) null;
         }
+
+        public void Deconstruct(out Row row, out Col col) { row = Row; col = Col; }
     }
 }

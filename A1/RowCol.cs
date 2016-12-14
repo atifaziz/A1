@@ -81,5 +81,7 @@ namespace A1
 
         public static bool operator ==(RowCol left, RowCol right) => left.Equals(right);
         public static bool operator !=(RowCol left, RowCol right) => !left.Equals(right);
+
+        public void Deconstruct(out Row row, out Col col) { row = Row; col = Col; }
     }
 }
