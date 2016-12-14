@@ -37,11 +37,11 @@ namespace A1
         public Col Col { get; }
 
         public RowCol(Col col, Row row) : this(row, col) {}
-        public RowCol(Row row, Col col) { Col = col; Row = row; }
+        public RowCol(Row row, Col col) { Row = row; Col = col; }
 
-        public bool Equals(RowCol other) => Col == other.Col && Row == other.Row;
+        public bool Equals(RowCol other) => Row == other.Row && Col == other.Col;
         public override bool Equals(object obj) => obj is RowCol && Equals((RowCol) obj);
-        public override int GetHashCode() => unchecked((Col * 397) ^ Row);
+        public override int GetHashCode() => unchecked((Row * 397) ^ Col);
 
         public string FormatA1() => A1Convert.NumberColumnAlpha(Col + 1) + (Row + 1);
 
