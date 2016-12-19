@@ -52,6 +52,7 @@ namespace A1
 
         public static <#= e #> operator +(<#= e #> col, int n) => new <#= e #>(col.Number + n);
         public static <#= e #> operator -(<#= e #> col, int n) => new <#= e #>(col.Number - n);
+        public static int operator -(<#= e #> a, <#= e #> b) => a.Offset - b.Offset;
         public static <#= e #> operator ++(<#= e #> col) => col + 1;
         public static <#= e #> operator --(<#= e #> col) => col - 1;
 
