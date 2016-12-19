@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+[assembly: AssemblyTitle("A1")]
+[assembly: AssemblyDescription("Library for A1-Style Cell Address Parsing & Formatting")]
 [assembly: AssemblyCompany("N/A")]
 [assembly: AssemblyProduct("A1")]
 
