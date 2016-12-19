@@ -27,42 +27,42 @@ namespace A1.Tests
         {
             var address = new Address();
             Assert.Equal(false, address.IsColAbs);
-            Assert.Equal(0, address.Col);
+            Assert.Equal(1, address.Col);
             Assert.Equal(false, address.IsRowAbs);
-            Assert.Equal(0, address.Row);
+            Assert.Equal(1, address.Row);
             Assert.Equal("A1", address.ToString());
         }
 
         [Fact]
         public void InitRelative()
         {
-            var address = new Address(12, 34);
-            Assert.Equal(false, address.IsColAbs);
-            Assert.Equal(12, address.Col);
+            var address = new Address((Row) 35, (Col) 13);
             Assert.Equal(false, address.IsRowAbs);
-            Assert.Equal(34, address.Row);
+            Assert.Equal(35, address.Row);
+            Assert.Equal(false, address.IsColAbs);
+            Assert.Equal(13, address.Col);
             Assert.Equal("M35", address.ToString());
         }
 
         [Fact]
         public void InitAbsolute()
         {
-            var address = new Address(12, 34, true);
+            var address = new Address((Row) 35, (Col) 13, true);
             Assert.Equal(true, address.IsColAbs);
-            Assert.Equal(12, address.Col);
+            Assert.Equal(13, address.Col);
             Assert.Equal(true, address.IsRowAbs);
-            Assert.Equal(34, address.Row);
+            Assert.Equal(35, address.Row);
             Assert.Equal("$M$35", address.ToString());
         }
 
         [Theory]
-        [InlineData(false, 12, false, 34, "M35"  )]
-        [InlineData(true , 12, false, 34, "$M35" )]
-        [InlineData(false, 12, true , 34, "M$35" )]
-        [InlineData(true , 12, true , 34, "$M$35")]
+        [InlineData(false, 13, false, 35, "M35"  )]
+        [InlineData(true , 13, false, 35, "$M35" )]
+        [InlineData(false, 13, true , 35, "M$35" )]
+        [InlineData(true , 13, true , 35, "$M$35")]
         public void Init(bool isColAbs, int col, bool isRowAbs, int row, string s)
         {
-            var address = new Address(isColAbs, col, isRowAbs, row);
+            var address = new Address(isRowAbs, (Row) row, isColAbs, (Col) col);
             Assert.Equal(isColAbs, address.IsColAbs);
             Assert.Equal(col, address.Col);
             Assert.Equal(isRowAbs, address.IsRowAbs);
@@ -78,43 +78,43 @@ namespace A1.Tests
         }
 
         [Theory]
-        [InlineData("A1"    ,  false,    0, false,  0)]
-        [InlineData("B1"    ,  false,    1, false,  0)]
-        [InlineData("C1"    ,  false,    2, false,  0)]
-        [InlineData("A5"    ,  false,    0, false,  4)]
-        [InlineData("B5"    ,  false,    1, false,  4)]
-        [InlineData("C5"    ,  false,    2, false,  4)]
-        [InlineData("AA1"   ,  false,   26, false,  0)]
-        [InlineData("AB2"   ,  false,   27, false,  1)]
-        [InlineData("AC3"   ,  false,   28, false,  2)]
-        [InlineData("ABC43" ,  false,  730, false, 42)]
-        [InlineData("DEF43" ,  false, 2839, false, 42)]
-        [InlineData("GHI43" ,  false, 4948, false, 42)]
-        [InlineData("$GHI43",  true , 4948, false, 42)]
-        [InlineData("GHI$43",  false, 4948, true , 42)]
-        [InlineData("$GHI$43", true , 4948, true , 42)]
-        [InlineData("a1"    ,  false,    0, false,  0)]
-        [InlineData("b1"    ,  false,    1, false,  0)]
-        [InlineData("c1"    ,  false,    2, false,  0)]
-        [InlineData("a5"    ,  false,    0, false,  4)]
-        [InlineData("b5"    ,  false,    1, false,  4)]
-        [InlineData("c5"    ,  false,    2, false,  4)]
-        [InlineData("aa1"   ,  false,   26, false,  0)]
-        [InlineData("ab2"   ,  false,   27, false,  1)]
-        [InlineData("ac3"   ,  false,   28, false,  2)]
-        [InlineData("abc43" ,  false,  730, false, 42)]
-        [InlineData("def43" ,  false, 2839, false, 42)]
-        [InlineData("ghi43" ,  false, 4948, false, 42)]
-        [InlineData("$ghi43",  true , 4948, false, 42)]
-        [InlineData("ghi$43",  false, 4948, true , 42)]
-        [InlineData("$ghi$43", true , 4948, true , 42)]
+        [InlineData("A1"    ,  false,    1, false,  1)]
+        [InlineData("B1"    ,  false,    2, false,  1)]
+        [InlineData("C1"    ,  false,    3, false,  1)]
+        [InlineData("A5"    ,  false,    1, false,  5)]
+        [InlineData("B5"    ,  false,    2, false,  5)]
+        [InlineData("C5"    ,  false,    3, false,  5)]
+        [InlineData("AA1"   ,  false,   27, false,  1)]
+        [InlineData("AB2"   ,  false,   28, false,  2)]
+        [InlineData("AC3"   ,  false,   29, false,  3)]
+        [InlineData("ABC43" ,  false,  731, false, 43)]
+        [InlineData("DEF43" ,  false, 2840, false, 43)]
+        [InlineData("GHI43" ,  false, 4949, false, 43)]
+        [InlineData("$GHI43",  true , 4949, false, 43)]
+        [InlineData("GHI$43",  false, 4949, true , 43)]
+        [InlineData("$GHI$43", true , 4949, true , 43)]
+        [InlineData("a1"    ,  false,    1, false,  1)]
+        [InlineData("b1"    ,  false,    2, false,  1)]
+        [InlineData("c1"    ,  false,    3, false,  1)]
+        [InlineData("a5"    ,  false,    1, false,  5)]
+        [InlineData("b5"    ,  false,    2, false,  5)]
+        [InlineData("c5"    ,  false,    3, false,  5)]
+        [InlineData("aa1"   ,  false,   27, false,  1)]
+        [InlineData("ab2"   ,  false,   28, false,  2)]
+        [InlineData("ac3"   ,  false,   29, false,  3)]
+        [InlineData("abc43" ,  false,  731, false, 43)]
+        [InlineData("def43" ,  false, 2840, false, 43)]
+        [InlineData("ghi43" ,  false, 4949, false, 43)]
+        [InlineData("$ghi43",  true , 4949, false, 43)]
+        [InlineData("ghi$43",  false, 4949, true , 43)]
+        [InlineData("$ghi$43", true , 4949, true , 43)]
         public void ParseA1(string s, bool isColAbs, int col, bool isRowAbs, int row)
         {
             var address = Address.ParseA1(s);
-            Assert.Equal(isColAbs, address.IsColAbs);
-            Assert.Equal(col, address.Col);
             Assert.Equal(isRowAbs, address.IsRowAbs);
             Assert.Equal(row, address.Row);
+            Assert.Equal(isColAbs, address.IsColAbs);
+            Assert.Equal(col, address.Col);
             Assert.Equal(s, address.ToString(), StringComparer.OrdinalIgnoreCase);
         }
 
@@ -159,7 +159,7 @@ namespace A1.Tests
             var absolute = address.MakeAbsolute();
             Assert.Equal(true, absolute.IsColAbs);
             Assert.Equal(true, absolute.IsRowAbs);
-            Assert.Equal(absolute.ColRow, address.ColRow);
+            Assert.Equal(absolute.RowCol, address.RowCol);
         }
 
         [Theory]
@@ -173,43 +173,43 @@ namespace A1.Tests
             var absolute = address.MakeRelative();
             Assert.Equal(false, absolute.IsColAbs);
             Assert.Equal(false, absolute.IsRowAbs);
-            Assert.Equal(absolute.ColRow, address.ColRow);
+            Assert.Equal(absolute.RowCol, address.RowCol);
         }
 
         [Fact]
         public void EqualityWithRelativeAnchor()
         {
-            Assert.True(new Address(12, 34).Equals(new Address(12, 34)));
+            Assert.True(new Address((Row) 12, (Col) 34).Equals(new Address((Row) 12, (Col) 34)));
         }
 
         [Fact]
         public void EqualityWithAbsoluteAnchor()
         {
-            Assert.True(new Address(12, 34, true).Equals(new Address(12, 34, true)));
+            Assert.True(new Address((Row) 12, (Col) 34, true).Equals(new Address((Row) 12, (Col) 34, true)));
         }
 
         [Fact]
         public void EqualityWithMixedAnchor()
         {
-            Assert.True(new Address(true, 12, false, 34).Equals(new Address(true, 12, false, 34)));
+            Assert.True(new Address(true, (Row) 12, false, (Col) 34).Equals(new Address(true, (Row) 12, false, (Col) 34)));
         }
 
         [Fact]
         public void InequalityWithRelativeAnchor()
         {
-            Assert.False(new Address(12, 34).Equals(new Address(34, 12)));
+            Assert.False(new Address((Row) 12, (Col) 34).Equals(new Address((Row) 34, (Col) 12)));
         }
 
         [Fact]
         public void InequalityWithAbsoluteAnchor()
         {
-            Assert.False(new Address(12, 34).Equals(new Address(12, 34, true)));
+            Assert.False(new Address((Row) 12, (Col) 34).Equals(new Address((Row) 12, (Col) 34, true)));
         }
 
         [Fact]
         public void InequalityWithMixedAnchor()
         {
-            Assert.False(new Address(false, 12, true, 34).Equals(new Address(true, 12, false, 34)));
+            Assert.False(new Address(false, (Row) 12, true, (Col) 34).Equals(new Address(true, (Row) 12, false, (Col) 34)));
         }
 
         static object[] Data(params object[] data) => data;

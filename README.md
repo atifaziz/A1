@@ -32,35 +32,36 @@ Console.WriteLine(A1Convert.MaxColumn); // 16384
 Console.WriteLine(A1Convert.NumberColumnAlpha(A1Convert.MaxColumn)); // XFD
 ```
 
-There are two value types defined in the library:
+There are four value types defined in the library:
 
-- `ColRow`: simply represents a column and row pair.
-- `Address`: builds on `ColRow` and permits flagging the column and/or row as
+- `Row`: represents a row number where first row is 1.
+- `Col`: represents a column number where first column is 1.
+- `RowCol`: represents a `Row` and `Col` pair.
+- `Address`: builds on `RowCol` and permits flagging the row and/or column as
   being absolute or relative. It also provides parsing A1-style cell
   references into an `Address` instance.
 
 Following is a demonstration of to use these types.
 
-Initialize a `ColRow` then format in A1-style:
+Initialize a `RowCol` then format in A1-style:
 
 ```c#
-var xy = new ColRow(12, 34);
-Console.WriteLine(xy);                            // (12,34)
-Console.WriteLine(xy.FormatA1());                 // M35
+var rc = new Col(12) + new Row(34);
+Console.WriteLine(rc);                            // (34,12)
+Console.WriteLine(rc.FormatA1());                 // M35
 ```
 
-`ColRow` values can be compared for equality and inequality:
+`RowCol` values can be compared for equality and inequality:
 
 ```c#
-Console.WriteLine(xy == new ColRow(34, 12)); // False
-Console.WriteLine(xy != new ColRow(34, 12)); // True
-Console.WriteLine(xy == new ColRow(12, 34)); // True
-Console.WriteLine(xy != new ColRow(12, 34)); // False
-
+Console.WriteLine(rc == new Col(34) + new Row(12)); // False
+Console.WriteLine(rc != new Col(34) + new Row(12)); // True
+Console.WriteLine(rc == new Col(12) + new Row(34)); // True
+Console.WriteLine(rc != new Col(12) + new Row(34)); // False
 ```
 
-A `ColRow` value can be tested for containment within a matrix defined by
-a pair of `ColRow` values (left-top then right-bottom):
+A `RowCol` value can be tested for containment within a matrix defined by
+a pair of `RowCol` values (top-left then bottom-right):
 
 ```c#
 var xy = new ColRow(12, 34);
@@ -71,21 +72,21 @@ Console.WriteLine(xy.IsContainedIn(lt, rbSmall)); // False
 Console.WriteLine(xy.IsContainedIn(lt, rbLarge)); // True
 ```
 
-Determine offset to another `ColRow`:
+Determine offset to another `RowCol`:
 
 ```c#
-var a = new ColRow(17, 5);
-var b = new ColRow(19, 71);
-var o = a.OffsetTo(b, (x, y) => new { X = x, Y = y });
+var a = new Col(17) + new Row(5);
+var b = new Col(19) + new Row(71);
+var o = a.OffsetTo(b, (y, x) => new { X = x, Y = y });
 Console.WriteLine(o.ToString()); // { X = 2, Y = 66 }
 ```
 
-Determine size of the box formed by two `ColRow` values:
+Determine size of the box formed by two `RowCol` values:
 
 ```c#
-var a = new ColRow(17, 5);
-var b = new ColRow(19, 71);
-var s = a.Size(b, (w, h) => new { Width = w, Height = h });
+var a = new Col(17) + new Row(5);
+var b = new Col(19) + new Row(71);
+var s = a.Size(b, (h, w) => new { Width = w, Height = h });
 Console.WriteLine(s.ToString()); // { X = 3, Y = 67 }
 ```
 
@@ -93,13 +94,13 @@ Initializing an `Address` and formatting:
 
 
 ```c#
-Console.WriteLine(new Address(12, 34));               // M35
-Console.WriteLine(new Address(12, 34, false));        // M35
-Console.WriteLine(new Address(12, 34, true));         // $M$35
-Console.WriteLine(new Address(false, 12, false, 34)); // M35
-Console.WriteLine(new Address(true , 12, false, 34)); // $M35
-Console.WriteLine(new Address(false, 12, true , 34)); // M$35
-Console.WriteLine(new Address(true , 12, true , 34)); // $M$35
+Console.WriteLine(new Address(new Col(12) + new Row(34)));              // M35
+Console.WriteLine(new Address(new Col(12) + new Row(34), false));       // M35
+Console.WriteLine(new Address(new Col(12) + new Row(34), true));        // $M$35
+Console.WriteLine(new Address(false, new Col(12), false, new Row(34))); // M35
+Console.WriteLine(new Address(true , new Col(12), false, new Row(34))); // $M35
+Console.WriteLine(new Address(false, new Col(12), true , new Row(34))); // M$35
+Console.WriteLine(new Address(true , new Col(12), true , new Row(34))); // $M$35
 ```
 
 Parsing an A1-style reference into an `Address`:
@@ -107,11 +108,11 @@ Parsing an A1-style reference into an `Address`:
 ```c#
 var a = Address.ParseA1("M$35");
 Console.WriteLine(a);           // M$35
-Console.WriteLine(a.IsColAbs);  // False
-Console.WriteLine(a.Col);       // 12
 Console.WriteLine(a.IsRowAbs);  // True
 Console.WriteLine(a.Row);       // 34
-Console.WriteLine(a.ColRow);    // (12, 34)
+Console.WriteLine(a.IsColAbs);  // True
+Console.WriteLine(a.Col);       // 12
+Console.WriteLine(a.RowCol);    // (34, 12)
 ```
 
 Make an `Address` absolute and then relative again:
