@@ -9,6 +9,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "A1.Tests", "A1.Tests\A1.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9CE311BE-1BD7-412E-8F84-73BA5D5EB318}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
 		build.cmd = build.cmd
 		pack.cmd = pack.cmd
 		README.md = README.md

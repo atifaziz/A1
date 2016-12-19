@@ -1,0 +1,23 @@
+version: '{build}'
+branches:
+  only:
+  - master
+skip_tags: true
+install:
+build_script:
+- ps: >-
+    $id = $env:APPVEYOR_REPO_COMMIT_TIMESTAMP -replace '([-:]|\.0+Z)', ''
+
+    $id = $id.Substring(0, 13)
+
+    .\pack.cmd ci-$id
+test_script:
+- cmd: .\test.cmd
+artifacts:
+- path: A1\bin\Release\*.nupkg
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/raboof/api/v2/package
+  api_key:
+    secure: fhGwXyO35FSshRzs5GWmF1LJTrd1sIqmS/jNCSfO2LfOciuYAKiXuFMYZFGiTAl+
+  symbol_server: https://www.myget.org/F/raboof/symbols/api/v2/package
