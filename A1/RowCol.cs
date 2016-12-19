@@ -43,7 +43,7 @@ namespace A1
         public override bool Equals(object obj) => obj is RowCol && Equals((RowCol) obj);
         public override int GetHashCode() => unchecked((Row * 397) ^ Col);
 
-        public string FormatA1() => A1Convert.NumberColumnAlpha(Col + 1) + (Row + 1);
+        public string FormatA1() => A1Convert.NumberColumnAlpha(Col) + Row;
 
         public override string ToString() => "(" + Row + "," + Col + ")";
 

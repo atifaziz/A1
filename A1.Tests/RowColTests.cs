@@ -122,5 +122,16 @@ namespace A1.Tests
             var e = Assert.Throws<ArgumentException>(() => cr1.Size(cr2, (h, w) => new { Height = h, Width = w }));
             Assert.Equal("other", e.ParamName);
         }
+
+        [Theory]
+        [InlineData("A1", 1, 1)]
+        [InlineData("B1", 1, 2)]
+        [InlineData("A2", 2, 1)]
+        [InlineData("B2", 2, 2)]
+        public void FormatA1(string expected, int row, int col)
+        {
+            var rc = new RowCol(new Row(row), new Col(col));
+            Assert.Equal(expected, rc.FormatA1());
+        }
     }
 }
