@@ -24,43 +24,44 @@
 namespace A1
 {
     using System;
-<#  foreach (var e in new[] { "Row", "Col" })
-    { #>
-
-    partial struct <#= e #> : IEquatable<<#= e #>>, IComparable<<#= e #>>
+<#  foreach (var c in new[] { "Row", "Col" })
     {
-        public static readonly <#= e #> First = default(<#= e #>);
+        var n = c.ToLowerInvariant(); #>
+
+    partial struct <#= c #> : IEquatable<<#= c #>>, IComparable<<#= c #>>
+    {
+        public static readonly <#= c #> First = default(<#= c #>);
 
         public int Offset { get; }
         int Number => Offset + 1;
 
-        public static <#= e #> FromOffset(int offset) => new <#= e #>(offset + 1);
+        public static <#= c #> FromOffset(int offset) => new <#= c #>(offset + 1);
 
-        public <#= e #>(int n)
+        public <#= c #>(int n)
         {
             if (n < 1) throw new ArgumentOutOfRangeException(nameof(n));
             Offset = n - 1;
         }
 
-        public bool Equals(<#= e #> other) => Offset == other.Offset;
-        public override bool Equals(object obj) => obj is <#= e #> && Equals((<#= e #>) obj);
+        public bool Equals(<#= c #> other) => Offset == other.Offset;
+        public override bool Equals(object obj) => obj is <#= c #> && Equals((<#= c #>) obj);
         public override int GetHashCode() => Offset;
 
-        public int CompareTo(<#= e #> other) => Offset.CompareTo(other.Offset);
+        public int CompareTo(<#= c #> other) => Offset.CompareTo(other.Offset);
 
         public override string ToString() => Number.ToString();
 
-        public static <#= e #> operator +(<#= e #> col, int n) => new <#= e #>(col.Number + n);
-        public static <#= e #> operator -(<#= e #> col, int n) => new <#= e #>(col.Number - n);
-        public static int operator -(<#= e #> a, <#= e #> b) => a.Offset - b.Offset;
-        public static <#= e #> operator ++(<#= e #> col) => col + 1;
-        public static <#= e #> operator --(<#= e #> col) => col - 1;
+        public static <#= c #> operator +(<#= c #> <#= n #>, int n) => new <#= c #>(<#= n #>.Number + n);
+        public static <#= c #> operator -(<#= c #> <#= n #>, int n) => new <#= c #>(<#= n #>.Number - n);
+        public static int operator -(<#= c #> a, <#= c #> b) => a.Offset - b.Offset;
+        public static <#= c #> operator ++(<#= c #> <#= n #>) => <#= n #> + 1;
+        public static <#= c #> operator --(<#= c #> <#= n #>) => <#= n #> - 1;
 
-        public static bool operator ==(<#= e #> left, <#= e #> right) => left.Equals(right);
-        public static bool operator !=(<#= e #> left, <#= e #> right) => !left.Equals(right);
+        public static bool operator ==(<#= c #> left, <#= c #> right) => left.Equals(right);
+        public static bool operator !=(<#= c #> left, <#= c #> right) => !left.Equals(right);
 
-        public static explicit operator <#= e #>(int value) => new <#= e #>(value);
-        public static implicit operator int(<#= e #> col) => col.Number;
+        public static explicit operator <#= c #>(int value) => new <#= c #>(value);
+        public static implicit operator int(<#= c #> <#= n #>) => <#= n #>.Number;
     }
 <# } #>
 }
