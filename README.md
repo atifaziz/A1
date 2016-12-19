@@ -34,8 +34,8 @@ Console.WriteLine(A1Convert.NumberColumnAlpha(A1Convert.MaxColumn)); // XFD
 
 There are four value types defined in the library:
 
-- `Row`: represents a zero-based row index
-- `Col`: represents a zero-based column index
+- `Row`: represents a row number where first row is 1.
+- `Col`: represents a column number where first column is 1.
 - `RowCol`: represents a `Row` and `Col` pair.
 - `Address`: builds on `RowCol` and permits flagging the row and/or column as
   being absolute or relative. It also provides parsing A1-style cell
