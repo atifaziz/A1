@@ -71,8 +71,8 @@ namespace A1
             do
             {
                 num -= 1;
-                var r = num %Alphabet.Length;
-                num = num /Alphabet.Length;
+                var r = num % Alphabet.Length;
+                num = num / Alphabet.Length;
                 chars[--i] = Alphabet[r];
             } while (num > 0);
             return new string(chars);
