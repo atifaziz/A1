@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.0</TargetFramework>
+    <LangVersion>7.1</LangVersion>
     <VersionPrefix>2.0.0</VersionPrefix>
     <DebugType>portable</DebugType>
     <Description>.NET Standard 1.0 library whose purpose is to help parse and format A1-style cell references (or addresses) like $FOO$42, those typically found in spreadsheet programs such as Microsoft Excel.</Description>

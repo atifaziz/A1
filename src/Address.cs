@@ -86,6 +86,13 @@ namespace A1
                 return selector(fa.Value, ta.Value);
             });
 
+        public static bool TryParseA1Range(string range, out Address from, out Address to)
+        {
+            bool parsed;
+            (parsed, from, to) = TryParseA1Range(range, default, (a, b) => (true, a, b));
+            return parsed;
+        }
+
         public static (Address From, Address To)? TryParseA1Range(string range) =>
             TryParseA1Range(range, ((Address, Address)?) null, (from, to) => (from, to));
 
