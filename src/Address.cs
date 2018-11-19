@@ -86,6 +86,9 @@ namespace A1
                 return selector(fa.Value, ta.Value);
             });
 
+        public static (Address From, Address To)? TryParseA1Range(string range) =>
+            TryParseA1Range(range, ((Address, Address)?) null, (from, to) => (from, to));
+
         public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector) =>
             TryParseA1Range(range, (r, fs, fa, ts, ta) => fa == null || ta == null
                                                         ? error
