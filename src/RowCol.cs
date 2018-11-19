@@ -56,6 +56,10 @@ namespace A1
             && Row <= b.Row;
 
         [Pure]
+        public (int Rows, int Cols) OffsetTo(RowCol other) =>
+            OffsetTo(other, ValueTuple.Create);
+
+        [Pure]
         public T OffsetTo<T>(RowCol other, Func<int, int, T> selector)
         {
             if (selector == null) throw new ArgumentNullException(nameof(selector));
