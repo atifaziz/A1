@@ -3,5 +3,4 @@
 VERSION_SUFFIX=
 if [ ! -z "$1" ]; then VERSION_SUFFIX="--version-suffix $1"; fi
 ./build.sh \
-&& dotnet test A1.Tests
-
+&& dotnet test --no-build tests

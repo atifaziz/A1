@@ -14,7 +14,7 @@ build_script:
 test_script:
 - cmd: .\test.cmd
 artifacts:
-- path: A1\bin\Release\*.nupkg
+- path: dist\*.nupkg
 deploy:
 - provider: NuGet
   server: https://www.myget.org/F/raboof/api/v2/package

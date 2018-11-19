@@ -9,5 +9,5 @@ which dotnet 2>/dev/null || {
 }
 dotnet --info \
 && dotnet restore \
-&& dotnet build -c Debug   A1 \
-&& dotnet build -c Release A1
+&& dotnet build --no-restore -c Debug   \
+&& dotnet build --no-restore -c Release

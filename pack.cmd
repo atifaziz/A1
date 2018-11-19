@@ -18,5 +18,5 @@ if not exist "%DOTNETEXE%" (
 )
 set VERSION_SUFFIX=
 if not "%~1"=="" set VERSION_SUFFIX=--version-suffix %1
-call build && "%DOTNETEXE%" pack -c Release %VERSION_SUFFIX% A1
+call build && "%DOTNETEXE%" pack --no-build -c Release %VERSION_SUFFIX%
 goto :EOF

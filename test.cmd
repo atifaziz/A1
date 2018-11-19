@@ -1,4 +1,4 @@
 @echo off
 pushd "%~dp0"
-call build && dotnet test A1.Tests
+call build && dotnet test --no-build tests
 popd
