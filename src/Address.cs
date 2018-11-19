@@ -58,7 +58,7 @@ namespace A1
             && RowCol.Equals(other.RowCol);
 
         public override bool Equals(object obj) =>
-            obj is Address && Equals((Address) obj);
+            obj is Address address && Equals(address);
 
         public override int GetHashCode() =>
             unchecked ((((IsColAbs.GetHashCode() * 397) ^ IsRowAbs.GetHashCode()) * 397) ^ RowCol.GetHashCode());
