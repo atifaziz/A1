@@ -132,11 +132,10 @@ namespace A1
             var col = A1Convert.TryAlphaColumnNumber(s.Substring(i, len)) ?? 0;
             if (col == 0)
                 return null;
-            int row;
             if (ii == s.Length)
                 return null;
             var absrow = s[ii] == '$';
-            return int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out row)
+            return int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out var row)
                 && row >= 1
                  ? new Address(absrow, new Row(row), abscol, new Col(col))
                  : (Address?) null;
