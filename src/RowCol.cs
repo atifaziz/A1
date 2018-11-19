@@ -67,6 +67,10 @@ namespace A1
         }
 
         [Pure]
+        public (int Height, int Width) Size(RowCol other) =>
+            Size(other, ValueTuple.Create);
+
+        [Pure]
         public T Size<T>(RowCol other, Func<int, int, T> selector)
         {
             if (selector == null) throw new ArgumentNullException(nameof(selector));
