@@ -26,9 +26,9 @@ namespace A1.Tests
         public void InitEmpty()
         {
             var address = new Address();
-            Assert.Equal(false, address.IsColAbs);
+            Assert.False(address.IsColAbs);
             Assert.Equal(1, address.Col);
-            Assert.Equal(false, address.IsRowAbs);
+            Assert.False(address.IsRowAbs);
             Assert.Equal(1, address.Row);
             Assert.Equal("A1", address.ToString());
         }
@@ -37,9 +37,9 @@ namespace A1.Tests
         public void InitRelative()
         {
             var address = new Address((Row) 35, (Col) 13);
-            Assert.Equal(false, address.IsRowAbs);
+            Assert.False(address.IsRowAbs);
             Assert.Equal(35, address.Row);
-            Assert.Equal(false, address.IsColAbs);
+            Assert.False(address.IsColAbs);
             Assert.Equal(13, address.Col);
             Assert.Equal("M35", address.ToString());
         }
@@ -48,9 +48,9 @@ namespace A1.Tests
         public void InitAbsolute()
         {
             var address = new Address((Row) 35, (Col) 13, true);
-            Assert.Equal(true, address.IsColAbs);
+            Assert.True(address.IsColAbs);
             Assert.Equal(13, address.Col);
-            Assert.Equal(true, address.IsRowAbs);
+            Assert.True(address.IsRowAbs);
             Assert.Equal(35, address.Row);
             Assert.Equal("$M$35", address.ToString());
         }
@@ -157,8 +157,8 @@ namespace A1.Tests
         {
             var address = Address.ParseA1(s);
             var absolute = address.MakeAbsolute();
-            Assert.Equal(true, absolute.IsColAbs);
-            Assert.Equal(true, absolute.IsRowAbs);
+            Assert.True(absolute.IsColAbs);
+            Assert.True(absolute.IsRowAbs);
             Assert.Equal(absolute.RowCol, address.RowCol);
         }
 
@@ -171,8 +171,8 @@ namespace A1.Tests
         {
             var address = Address.ParseA1(s);
             var absolute = address.MakeRelative();
-            Assert.Equal(false, absolute.IsColAbs);
-            Assert.Equal(false, absolute.IsRowAbs);
+            Assert.False(absolute.IsColAbs);
+            Assert.False(absolute.IsRowAbs);
             Assert.Equal(absolute.RowCol, address.RowCol);
         }
 
