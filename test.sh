@@ -2,4 +2,7 @@
 set -e
 cd "$(dirname "$0")"
 ./build.sh
-dotnet test --no-build tests
+dotnet test --no-build tests -c Debug -p:CollectCoverage=true \
+                                      -p:CoverletOutputFormat=opencover \
+                                      -p:Exclude=[XUnit*]*
+dotnet test --no-build tests -c Release
