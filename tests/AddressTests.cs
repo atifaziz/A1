@@ -120,12 +120,13 @@ namespace A1.Tests
 
         public static IEnumerable<object[]> BadA1Data => new[]
         {
-            Data(""    ),
-            Data("Al"  ),
-            Data("AB1C"),
-            Data("F00" ),
-            Data("F-1" ),
-            Data("FOO" ),
+            Data(""     ),
+            Data("Al"   ),
+            Data("AB1C" ),
+            Data("F00"  ),
+            Data("F-1"  ),
+            Data("FOO"  ),
+            Data("TEST1"),
         };
 
         [Theory]

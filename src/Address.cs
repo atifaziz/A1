@@ -139,7 +139,7 @@ namespace A1
             if (len == 0)
                 return null;
             var col = A1Convert.TryAlphaColumnNumber(s.Substring(i, len)) ?? 0;
-            if (col == 0)
+            if (col == 0 || col >= A1Convert.MaxColumn)
                 return null;
             if (ii == s.Length)
                 return null;
