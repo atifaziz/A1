@@ -31,6 +31,10 @@
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="tt.cmd" />
+    <None Remove="tt.sh" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="..\COPYING.txt" Link="COPYING.txt">
       <PackagePath />
     </Content>
@@ -51,6 +55,7 @@
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <DotNetCliToolReference Include="T5.TextTransform.Tool" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
