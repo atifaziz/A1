@@ -214,5 +214,46 @@ namespace A1.Tests
         }
 
         static object[] Data(params object[] data) => data;
+
+        [Theory]
+        [InlineData("A1"    ,    1,  1,    1,  1)]
+        [InlineData("B1"    ,    2,  1,    2,  1)]
+        [InlineData("C1"    ,    3,  1,    3,  1)]
+        [InlineData("A5"    ,    1,  5,    1,  5)]
+        [InlineData("B5"    ,    2,  5,    2,  5)]
+        [InlineData("C5"    ,    3,  5,    3,  5)]
+        [InlineData("AA1"   ,   27,  1,   27,  1)]
+        [InlineData("AB2"   ,   28,  2,   28,  2)]
+        [InlineData("AC3"   ,   29,  3,   29,  3)]
+        [InlineData("ABC43" ,  731, 43,  731, 43)]
+        [InlineData("DEF43" , 2840, 43, 2840, 43)]
+        [InlineData("GHI43" , 4949, 43, 4949, 43)]
+        [InlineData("A1:C5" ,    1,  1,    3,  5)]
+        [InlineData("C5:A1" ,    3,  5,    1,  1)]
+        [InlineData("B3:G5" ,    2,  3,    7,  5)]
+        public void ParseA1Range(string s, int col1, int row1, int col2, int row2)
+        {
+            var (from, to) = Address.ParseA1Range(s);
+            Assert.Equal(col1, from.Col);
+            Assert.Equal(row1, from.Row);
+            Assert.Equal(col2, to.Col);
+            Assert.Equal(row2, to.Row);
+        }
+
+        [Theory]
+        [InlineData("FOO" , "FOO")]
+        [InlineData("X"   , "X"  )]
+        [InlineData("42"  , "42" )]
+        [InlineData("A1:" , ""   )]
+        [InlineData(":B2" , ""   )]
+        [InlineData("A1:B", "B"  )]
+        [InlineData("A:B2", "A"  )]
+        [InlineData("1:B2", "1"  )]
+        [InlineData("A1:2", "2"  )]
+        public void ParseA1RangeBad(string s, string part)
+        {
+            var e = Assert.Throws<FormatException>(() => Address.ParseA1Range(s));
+            Assert.Equal($"'{part}' is not a valid A1 cell reference style in the range '{s}'.", e.Message);
+        }
     }
 }
