@@ -35,22 +35,30 @@ namespace A1
         }
 
         public static int? TryAlphaColumnNumber(string alpha)
+            => alpha == null ? null
+             : TryAlphaColumnNumber(alpha, 0, alpha.Length, out var i, out var n) && i == alpha.Length ? n : (int?) null;
+
+        public static bool TryAlphaColumnNumber(string alpha, int index, int endIndex, out int stopIndex, out int result)
         {
-            if (string.IsNullOrEmpty(alpha))
-                return null;
-            var c1 = 0;
+            if (alpha == null) throw new ArgumentNullException(nameof(alpha));
+            if (index < 0 || index > alpha.Length) throw new ArgumentOutOfRangeException(nameof(index), index, null);
+            if (endIndex < 0 || endIndex > alpha.Length) throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, null);
+            if (index > endIndex) throw new ArgumentOutOfRangeException(nameof(index), index, null);
+
+            result = 0;
             var m = 1;
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
-            foreach (var ach in alpha)
+            for (; index < endIndex; index++)
             {
+                var ach = alpha[index];
                 var ch = ach & ~32;
                 if (ch < 'A' || ch > 'Z')
-                    return null;
+                    break;
                 var n = ch - 'A' + 1;
-                c1 = c1 * m + n;
+                result = result * m + n;
                 m = 26;
             }
-            return c1;
+            stopIndex = index;
+            return result > 0;
         }
 
         public static string NumberColumnAlpha(int number)

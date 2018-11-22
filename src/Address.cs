@@ -17,7 +17,6 @@
 namespace A1
 {
     using System;
-    using System.Globalization;
 
     public struct Address : IEquatable<Address>
     {
@@ -79,10 +78,10 @@ namespace A1
             ParseA1Range(range, ValueTuple.Create);
 
         public static T ParseA1Range<T>(string range, Func<Address, Address, T> selector) =>
-            TryParseA1Range(range, (r, fs, fa, ts, ta) =>
+            TryParseA1Range(range, (r, fi, fl, fa, ti, tl, ta) =>
             {
                 if (fa == null || ta == null)
-                    throw new FormatException($"'{(fa == null ? fs : ts)}' is not a valid A1 cell reference style in the range '{r}'.");
+                    throw new FormatException($"'{(fa == null ? r.Substring(fi, fl) : r.Substring(ti, tl))}' is not a valid A1 cell reference style in the range '{r}'.");
                 return selector(fa.Value, ta.Value);
             });
 
@@ -97,23 +96,31 @@ namespace A1
             TryParseA1Range(range, ((Address, Address)?) null, (from, to) => (from, to));
 
         public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector) =>
-            TryParseA1Range(range, (r, fs, fa, ts, ta) => fa == null || ta == null
-                                                        ? error
-                                                        : selector(fa.Value, ta.Value));
+            TryParseA1Range(range, (_, fi, fl, fa, ti, tl, ta) =>
+                                       fa == null || ta == null
+                                       ? error
+                                       : selector(fa.Value, ta.Value));
 
-        static T TryParseA1Range<T>(string range, Func<string, string, Address?, string, Address?, T> selector)
+        static T TryParseA1Range<T>(string range, Func<string, int, int, Address?, int, int, Address?, T> selector)
         {
             var index = range.IndexOf(':');
+
             if (index < 0)
             {
                 var r = TryParseA1(range);
-                return selector(range, range, r, range, r);
+                return selector(range, 0, range.Length, r, 0, range.Length, r);
             }
-            var fs = range.Substring(0, index);
-            var from = TryParseA1(fs);
-            var ts = range.Substring(index + 1);
-            var to = TryParseA1(ts);
-            return selector(range, fs, from, ts, to);
+
+            const int i1 = 0;
+            var l1 = index;
+            var i2 = index + 1;
+            var l2 = range.Length - i2;
+
+            return !TryParseA1(range, i1, l1, out var i, out var from) || i < l1
+                 ? selector(range, i1, l1, null, i2, l2, null)
+                 : !TryParseA1(range, i2, range.Length, out i, out var to) || i < range.Length
+                 ? selector(range, i1, l1, from, i2, l2, null)
+                 : selector(range, i1, l1, from, i2, l2, to);
         }
 
         public static Address ParseA1(string s)
@@ -126,28 +133,39 @@ namespace A1
         }
 
         public static Address? TryParseA1(string s)
+            => s != null && TryParseA1(s, 0, s.Length, out var i, out var address) && i == s.Length
+             ? address
+             : (Address?) null;
+
+        public static bool TryParseA1(string s, int index, int endIndex, out int stopIndex, out Address result)
         {
-            if (string.IsNullOrEmpty(s))
-                return null;
-            var abscol = s[0] == '$';
-            var i = abscol ? 1 : 0;
-            var ii = i;
-            int ch;
-            while (ii < s.Length && (ch = s[ii] & ~32) >= 'A' && ch <= 'Z')
-                ii++;
-            var len = ii - i;
-            if (len == 0)
-                return null;
-            var col = A1Convert.TryAlphaColumnNumber(s.Substring(i, len)) ?? 0;
-            if (col == 0 || col >= A1Convert.MaxColumn)
-                return null;
-            if (ii == s.Length)
-                return null;
-            var absrow = s[ii] == '$';
-            return int.TryParse(s.Substring(ii + (absrow ? 1 : 0)), NumberStyles.None, CultureInfo.InvariantCulture, out var row)
-                && row >= 1
-                 ? new Address(absrow, new Row(row), abscol, new Col(col))
-                 : (Address?) null;
+            if (s == null) throw new ArgumentNullException(nameof(s));
+            if (index < 0 || index > s.Length) throw new ArgumentOutOfRangeException(nameof(index), index, null);
+            if (endIndex < 0 || endIndex > s.Length) throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, null);
+            if (index > endIndex) throw new ArgumentOutOfRangeException(nameof(index), index, null);
+
+            bool abscol, absrow;
+            var i = index;
+            var address
+                = endIndex > index
+                  && A1Convert.TryAlphaColumnNumber(s, index + ((abscol = s[i] == '$') ? 1 : 0), endIndex, out i, out var col)
+                  && i < endIndex && ((absrow = s[i] == '$') || s[i] >= '0' && s[i] <= '9')
+                  && col <= A1Convert.MaxColumn && Int.TryParse(s, i + (absrow ? 1 : 0), endIndex, out i, out var row)
+                  && i == endIndex && row >= 1
+                  ? new Address(abscol, new Col(col), absrow, new Row(row))
+                  : (Address?) null;
+
+            switch (address)
+            {
+                case Address a:
+                    stopIndex = i;
+                    result = a;
+                    return true;
+                default:
+                    stopIndex = i;
+                    result = default;
+                    return false;
+            }
         }
     }
 }
