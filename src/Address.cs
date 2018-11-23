@@ -151,7 +151,7 @@ namespace A1
                   && A1Convert.TryAlphaColumnNumber(s, index + ((abscol = s[i] == '$') ? 1 : 0), endIndex, out i, out var col)
                   && i < endIndex && ((absrow = s[i] == '$') || s[i] >= '0' && s[i] <= '9')
                   && col <= A1Convert.MaxColumn && Int.TryParse(s, i + (absrow ? 1 : 0), endIndex, out i, out var row)
-                  && i == endIndex && row >= 1
+                  && row >= 1
                   ? new Address(abscol, new Col(col), absrow, new Row(row))
                   : (Address?) null;
 
