@@ -325,5 +325,12 @@ namespace A1.Tests
                 Address.TryParseA1("FOOBAR", 1, 0, out _, out _));
             Assert.Equal("index", e.ParamName);
         }
+
+        [Fact]
+        public void ParseA1WithVeryLargeRowThrows()
+        {
+            Assert.Throws<FormatException>(() =>
+                Address.ParseA1("A" + (int.MaxValue + 1L).ToString(CultureInfo.InvariantCulture)));
+        }
     }
 }

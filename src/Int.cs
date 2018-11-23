@@ -35,7 +35,13 @@ namespace A1
                 var unit = ch - '0';
                 if (unit < 0 || unit > 9)
                     break;
-                result = result * 10 + unit;
+                var n = result * 10L + unit;
+                if (n > int.MaxValue)
+                {
+                    stopIndex = i;
+                    return false;
+                }
+                result = (int) n;
             }
 
             stopIndex = i;
