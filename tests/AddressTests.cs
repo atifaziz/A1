@@ -241,6 +241,28 @@ namespace A1.Tests
             Assert.Equal(row2, to.Row);
         }
 
+        [Theory]
+        [InlineData("FOO")]
+        [InlineData("X")]
+        [InlineData("42")]
+        [InlineData(":B42")]
+        [InlineData("A:B42")]
+        [InlineData("1:B42")]
+        [InlineData("A1:")]
+        [InlineData("A1:B")]
+        [InlineData("A1:42")]
+        [InlineData("TEST42")]
+        [InlineData("A1:TEST42")]
+        [InlineData("A1 B42")]
+        [InlineData("A1;B42")]
+        [InlineData("A1:B42!")]
+        public void TryParseA1Range(string range)
+        {
+            Assert.Null(Address.TryParseA1Range(range));
+            Assert.False(Address.TryParseA1Range(range, out _, out _));
+        }
+
+
         const string BadAddress1MessageTemplate = "The first address in the range '?' is not a valid A1 cell reference style. Parsing failed at position #.";
         const string BadAddress2MessageTemplate = "The second address in the range '?' is not a valid A1 cell reference style. Parsing failed at position #.";
         const string BadSeparatorMessageTemplate = "The separator at position # in the range '?' must be a colon (:).";
