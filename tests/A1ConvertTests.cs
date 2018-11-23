@@ -54,7 +54,7 @@ namespace A1.Tests
         public void TryAlphaColumnNumberWithNullAlphaThrows()
         {
             var e = Assert.Throws<ArgumentNullException>(() =>
-                A1Convert.TryAlphaColumnNumber(null, 0, 0, out _, out _));
+                A1Convert.TryAlphaColumnNumber(null, 0, out _, out _));
             Assert.Equal("alpha", e.ParamName);
         }
 
@@ -64,25 +64,7 @@ namespace A1.Tests
         public void TryAlphaColumnNumberWithInvalidIndexThrows(int i)
         {
             var e = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                A1Convert.TryAlphaColumnNumber(string.Empty, i, 0, out _, out _));
-            Assert.Equal("index", e.ParamName);
-        }
-
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(1)]
-        public void TryAlphaColumnNumberWithInvalidEndIndexThrows(int i)
-        {
-            var e = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                A1Convert.TryAlphaColumnNumber(string.Empty, 0, i, out _, out _));
-            Assert.Equal("endIndex", e.ParamName);
-        }
-
-        [Fact]
-        public void TryAlphaColumnNumberWithIndexGreaterThanEndIndexThrows()
-        {
-            var e = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                A1Convert.TryAlphaColumnNumber("FOOBAR", 1, 0, out _, out _));
+                A1Convert.TryAlphaColumnNumber(string.Empty, i, out _, out _));
             Assert.Equal("index", e.ParamName);
         }
 

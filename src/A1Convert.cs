@@ -36,18 +36,16 @@ namespace A1
 
         public static int? TryAlphaColumnNumber(string alpha)
             => alpha == null ? null
-             : TryAlphaColumnNumber(alpha, 0, alpha.Length, out var i, out var n) && i == alpha.Length ? n : (int?) null;
+             : TryAlphaColumnNumber(alpha, 0, out var i, out var n) && i == alpha.Length ? n : (int?) null;
 
-        public static bool TryAlphaColumnNumber(string alpha, int index, int endIndex, out int stopIndex, out int result)
+        public static bool TryAlphaColumnNumber(string alpha, int index, out int stopIndex, out int result)
         {
             if (alpha == null) throw new ArgumentNullException(nameof(alpha));
             if (index < 0 || index > alpha.Length) throw new ArgumentOutOfRangeException(nameof(index), index, null);
-            if (endIndex < 0 || endIndex > alpha.Length) throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, null);
-            if (index > endIndex) throw new ArgumentOutOfRangeException(nameof(index), index, null);
 
             result = 0;
             var m = 1;
-            for (; index < endIndex; index++)
+            for (; index < alpha.Length; index++)
             {
                 var ach = alpha[index];
                 var ch = ach & ~32;

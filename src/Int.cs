@@ -20,16 +20,15 @@ namespace A1
 
     static class Int
     {
-        public static bool TryParse(string s, int index, int endIndex, out int stopIndex, out int result)
+        public static bool TryParse(string s, int index, out int stopIndex, out int result)
         {
             Debug.Assert(s != null);
             Debug.Assert(index >= 0 && index <= s.Length);
             Debug.Assert(index >= 0 && index <= s.Length);
-            Debug.Assert(index <= endIndex);
 
             result = 0;
             var i = index;
-            for (; i < endIndex; i++)
+            for (; i < s.Length; i++)
             {
                 var ch = s[i];
                 var unit = ch - '0';

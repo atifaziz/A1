@@ -108,13 +108,13 @@ namespace A1
             Func<string, int, TContext, TResult> toErrorSelector,
             Func<string, int, TContext, TResult> endErrorSelector,
             Func<Address, Address, TResult> selector)
-            => !TryParseA1(range, 0, range.Length, out var i, out var from)
+            => !TryParseA1(range, 0, out var i, out var from)
              ? fromErrorSelector(range, i, context)
              : i == range.Length
              ? selector(from, from)
              : range[i] != ':'
              ? separatorErrorSelector(range, i, context)
-             : !TryParseA1(range, ++i, range.Length, out i, out var to)
+             : !TryParseA1(range, ++i, out i, out var to)
              ? toErrorSelector(range, i, context)
              : i < range.Length
              ? endErrorSelector(range, i, context)
@@ -130,24 +130,22 @@ namespace A1
         }
 
         public static Address? TryParseA1(string s)
-            => s != null && TryParseA1(s, 0, s.Length, out var i, out var address) && i == s.Length
+            => s != null && TryParseA1(s, 0, out var i, out var address) && i == s.Length
              ? address
              : (Address?) null;
 
-        public static bool TryParseA1(string s, int index, int endIndex, out int stopIndex, out Address result)
+        public static bool TryParseA1(string s, int index, out int stopIndex, out Address result)
         {
             if (s == null) throw new ArgumentNullException(nameof(s));
             if (index < 0 || index > s.Length) throw new ArgumentOutOfRangeException(nameof(index), index, null);
-            if (endIndex < 0 || endIndex > s.Length) throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, null);
-            if (index > endIndex) throw new ArgumentOutOfRangeException(nameof(index), index, null);
 
             bool abscol, absrow;
             var i = index;
             var address
-                = endIndex > index
-                  && A1Convert.TryAlphaColumnNumber(s, index + ((abscol = s[i] == '$') ? 1 : 0), endIndex, out i, out var col)
-                  && i < endIndex && ((absrow = s[i] == '$') || s[i] >= '0' && s[i] <= '9')
-                  && col <= A1Convert.MaxColumn && Int.TryParse(s, i + (absrow ? 1 : 0), endIndex, out i, out var row)
+                = s.Length > index
+                  && A1Convert.TryAlphaColumnNumber(s, index + ((abscol = s[i] == '$') ? 1 : 0), out i, out var col)
+                  && i < s.Length && ((absrow = s[i] == '$') || s[i] >= '0' && s[i] <= '9')
+                  && col <= A1Convert.MaxColumn && Int.TryParse(s, i + (absrow ? 1 : 0), out i, out var row)
                   && row >= 1
                   ? new Address(abscol, new Col(col), absrow, new Row(row))
                   : (Address?) null;

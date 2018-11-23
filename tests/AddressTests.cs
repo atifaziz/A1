@@ -294,7 +294,7 @@ namespace A1.Tests
         public void TryParseA1WithNullStringThrows()
         {
             var e = Assert.Throws<ArgumentNullException>(() =>
-                Address.TryParseA1(null, 0, 0, out _, out _));
+                Address.TryParseA1(null, 0, out _, out _));
             Assert.Equal("s", e.ParamName);
         }
 
@@ -304,25 +304,7 @@ namespace A1.Tests
         public void TryParseA1WithInvalidIndexThrows(int i)
         {
             var e = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Address.TryParseA1(string.Empty, i, 0, out _, out _));
-            Assert.Equal("index", e.ParamName);
-        }
-
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(1)]
-        public void TryParseA1WithInvalidEndIndexThrows(int i)
-        {
-            var e = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Address.TryParseA1(string.Empty, 0, i, out _, out _));
-            Assert.Equal("endIndex", e.ParamName);
-        }
-
-        [Fact]
-        public void TryParseA1WithIndexGreaterThanEndIndexThrows()
-        {
-            var e = Assert.Throws<ArgumentOutOfRangeException>(() =>
-                Address.TryParseA1("FOOBAR", 1, 0, out _, out _));
+                Address.TryParseA1(string.Empty, i, out _, out _));
             Assert.Equal("index", e.ParamName);
         }
 
