@@ -150,14 +150,14 @@ namespace A1
                   ? new Address(abscol, new Col(col), absrow, new Row(row))
                   : (Address?) null;
 
+            stopIndex = i;
+
             switch (address)
             {
                 case Address a:
-                    stopIndex = i;
                     result = a;
                     return true;
                 default:
-                    stopIndex = i;
                     result = default;
                     return false;
             }
