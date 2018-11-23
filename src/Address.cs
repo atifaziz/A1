@@ -78,12 +78,12 @@ namespace A1
             ParseA1Range(range, ValueTuple.Create);
 
         public static T ParseA1Range<T>(string range, Func<Address, Address, T> selector) =>
-            TryParseA1Range(range, (r, fi, fl, fa, ti, tl, ta) =>
-            {
-                if (fa == null || ta == null)
-                    throw new FormatException($"'{(fa == null ? r.Substring(fi, fl) : r.Substring(ti, tl))}' is not a valid A1 cell reference style in the range '{r}'.");
-                return selector(fa.Value, ta.Value);
-            });
+            TryParseA1Range(range, 0,
+                (r, i, _) => throw new FormatException($"The first address in the range '{r}' is not a valid A1 cell reference style. Parsing failed at position {i + 1}."),
+                (r, i, _) => throw new FormatException($"The separator at position {i + 1} in the range '{r}' must be a colon (:)."),
+                (r, i, _) => throw new FormatException($"The second address in the range '{r}' is not a valid A1 cell reference style. Parsing failed at position {i + 1}."),
+                (r, i, _) => throw new FormatException($"The range '{r}' is incorrectly terminated at position {i + 1}."),
+                selector);
 
         public static bool TryParseA1Range(string range, out Address from, out Address to)
         {
@@ -95,33 +95,30 @@ namespace A1
         public static (Address From, Address To)? TryParseA1Range(string range) =>
             TryParseA1Range(range, ((Address, Address)?) null, (from, to) => (from, to));
 
-        public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector) =>
-            TryParseA1Range(range, (_, fi, fl, fa, ti, tl, ta) =>
-                                       fa == null || ta == null
-                                       ? error
-                                       : selector(fa.Value, ta.Value));
-
-        static T TryParseA1Range<T>(string range, Func<string, int, int, Address?, int, int, Address?, T> selector)
+        public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector)
         {
-            var index = range.IndexOf(':');
-
-            if (index < 0)
-            {
-                var r = TryParseA1(range);
-                return selector(range, 0, range.Length, r, 0, range.Length, r);
-            }
-
-            const int i1 = 0;
-            var l1 = index;
-            var i2 = index + 1;
-            var l2 = range.Length - i2;
-
-            return !TryParseA1(range, i1, l1, out var i, out var from) || i < l1
-                 ? selector(range, i1, l1, null, i2, l2, null)
-                 : !TryParseA1(range, i2, range.Length, out i, out var to) || i < range.Length
-                 ? selector(range, i1, l1, from, i2, l2, null)
-                 : selector(range, i1, l1, from, i2, l2, to);
+            T Error(string r, int i, T err) => err;
+            return TryParseA1Range(range, error, Error, Error, Error, Error, selector);
         }
+
+        static TResult TryParseA1Range<TContext, TResult>(string range,
+            TContext context,
+            Func<string, int, TContext, TResult> fromErrorSelector,
+            Func<string, int, TContext, TResult> separatorErrorSelector,
+            Func<string, int, TContext, TResult> toErrorSelector,
+            Func<string, int, TContext, TResult> endErrorSelector,
+            Func<Address, Address, TResult> selector)
+            => !TryParseA1(range, 0, range.Length, out var i, out var from)
+             ? fromErrorSelector(range, i, context)
+             : i == range.Length
+             ? selector(from, from)
+             : range[i] != ':'
+             ? separatorErrorSelector(range, i, context)
+             : !TryParseA1(range, ++i, range.Length, out i, out var to)
+             ? toErrorSelector(range, i, context)
+             : i < range.Length
+             ? endErrorSelector(range, i, context)
+             : selector(from, to);
 
         public static Address ParseA1(string s)
         {

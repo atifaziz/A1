@@ -18,6 +18,7 @@ namespace A1.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using Xunit;
 
     public class AddressTests
@@ -240,20 +241,31 @@ namespace A1.Tests
             Assert.Equal(row2, to.Row);
         }
 
+        const string BadAddress1MessageTemplate = "The first address in the range '?' is not a valid A1 cell reference style. Parsing failed at position #.";
+        const string BadAddress2MessageTemplate = "The second address in the range '?' is not a valid A1 cell reference style. Parsing failed at position #.";
+        const string BadSeparatorMessageTemplate = "The separator at position # in the range '?' must be a colon (:).";
+
         [Theory]
-        [InlineData("FOO" , "FOO")]
-        [InlineData("X"   , "X"  )]
-        [InlineData("42"  , "42" )]
-        [InlineData("A1:" , ""   )]
-        [InlineData(":B2" , ""   )]
-        [InlineData("A1:B", "B"  )]
-        [InlineData("A:B2", "A"  )]
-        [InlineData("1:B2", "1"  )]
-        [InlineData("A1:2", "2"  )]
-        public void ParseA1RangeBad(string s, string part)
+        [InlineData("FOO"      , 4, BadAddress1MessageTemplate)]
+        [InlineData("X"        , 2, BadAddress1MessageTemplate)]
+        [InlineData("42"       , 1, BadAddress1MessageTemplate)]
+        [InlineData(":B42"     , 1, BadAddress1MessageTemplate)]
+        [InlineData("A:B42"    , 2, BadAddress1MessageTemplate)]
+        [InlineData("1:B42"    , 1, BadAddress1MessageTemplate)]
+        [InlineData("A1:"      , 4, BadAddress2MessageTemplate)]
+        [InlineData("A1:B"     , 5, BadAddress2MessageTemplate)]
+        [InlineData("A1:42"    , 4, BadAddress2MessageTemplate)]
+        [InlineData("TEST42"   , 5, BadAddress1MessageTemplate)]
+        [InlineData("A1:TEST42", 8, BadAddress2MessageTemplate)]
+        [InlineData("A1 B42"   , 3, BadSeparatorMessageTemplate)]
+        [InlineData("A1;B42"   , 3, BadSeparatorMessageTemplate)]
+        [InlineData("A1:B42!"  , 7, "The range '?' is incorrectly terminated at position #.")]
+        public void ParseA1RangeBad(string s, int position, string template)
         {
             var e = Assert.Throws<FormatException>(() => Address.ParseA1Range(s));
-            Assert.Equal($"'{part}' is not a valid A1 cell reference style in the range '{s}'.", e.Message);
+            var message = template.Replace("?", s)
+                                  .Replace("#", position.ToString(CultureInfo.InvariantCulture));
+            Assert.Equal(message, e.Message);
         }
     }
 }
