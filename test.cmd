@@ -6,5 +6,6 @@ set TEST=dotnet test --no-build tests -c
  && %TEST% Debug -p:CollectCoverage=true ^
                  -p:CoverletOutputFormat=opencover ^
                  -p:Exclude=[XUnit*]* ^
- && %TEST% Release
+                 %* ^
+ && %TEST% Release %*
 popd
