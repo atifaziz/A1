@@ -81,6 +81,15 @@ var o = a.OffsetTo(b, (y, x) => new { X = x, Y = y });
 Console.WriteLine(o.ToString()); // { X = 2, Y = 66 }
 ```
 
+Alternatively using tuples:
+
+```c#
+var a = new Col(17) + new Row(5);
+var b = new Col(19) + new Row(71);
+var (y, x) = a.OffsetTo(b);
+Console.WriteLine($"{{ X = {x}, Y = {y} }}"); // { X = 2, Y = 66 }
+```
+
 Determine size of the box formed by two `RowCol` values:
 
 ```c#
@@ -90,8 +99,17 @@ var s = a.Size(b, (h, w) => new { Width = w, Height = h });
 Console.WriteLine(s.ToString()); // { Width = 3, Height = 67 }
 ```
 
-Initializing an `Address` and formatting:
+Alternatively using tuples:
 
+```c#
+var a = new Col(17) + new Row(5);
+var b = new Col(19) + new Row(71);
+var (h, w) = a.Size(b);
+Console.WriteLine("Width = " + w);  // Width = 3
+Console.WriteLine("Height = " + h); // Height = 67
+```
+
+Initializing an `Address` and formatting:
 
 ```c#
 Console.WriteLine(new Address(new Col(13) + new Row(35)));                               // M35
@@ -122,7 +140,7 @@ var rel = abs.MakeRelative();       // M35
 Console.WriteLine(rel);
 ```
 
-Parse a range into an `Address` couple (i.e. `Tuple<Address, Address>`):
+Parse a range into an `Address` couple (i.e. `(Address, Address)`):
 
 ```c#
 var range = Address.ParseA1Range("B5:Z10");
