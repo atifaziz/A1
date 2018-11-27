@@ -81,6 +81,10 @@ namespace A1
             return selector(y + 1, x + 1);
         }
 
+        [Pure]
+        public void Deconstruct(out Row row, out Col col) =>
+            (row, col) = (Row, Col);
+
         public static bool operator ==(RowCol left, RowCol right) => left.Equals(right);
         public static bool operator !=(RowCol left, RowCol right) => !left.Equals(right);
     }

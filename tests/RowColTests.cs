@@ -133,5 +133,19 @@ namespace A1.Tests
             var rc = new RowCol(new Row(row), new Col(col));
             Assert.Equal(expected, rc.FormatA1());
         }
+
+        [Theory]
+        [InlineData(1, 1)]
+        [InlineData(1, 2)]
+        [InlineData(2, 1)]
+        [InlineData(2, 2)]
+        public void Deconstruction(int row, int col)
+        {
+            var r = new Row(row);
+            var c = new Col(col);
+            var (ar, ac) = new RowCol(r, c);
+            Assert.Equal(r, ar);
+            Assert.Equal(c, ac);
+        }
     }
 }
