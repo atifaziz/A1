@@ -38,26 +38,6 @@ namespace A1
         public Address(Row row, Col col, AddressTraits traits) :
             this(new RowCol(row, col), traits) {}
 
-        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
-        public Address(Row row, Col col, bool isAbs) :
-            this(row, col, isAbs ? AddressTraits.Absolute : AddressTraits.None) {}
-
-        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
-        public Address(Col col, Row row, bool isAbs) :
-            this(row, col, isAbs) {}
-
-        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
-        public Address(RowCol rc, bool isAbs) :
-            this(rc.Row, rc.Col, isAbs ? AddressTraits.Absolute : AddressTraits.None) {}
-
-        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
-        public Address(bool isColAbs, Col col, bool isRowAbs, Row row) :
-            this(row, col, GetTraits(isRowAbs, isColAbs)) {}
-
-        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
-        public Address(bool isRowAbs, Row row, bool isColAbs, Col col) :
-            this(row, col, GetTraits(isRowAbs, isColAbs)) {}
-
         public Address(RowCol rc) :
             this(rc, AddressTraits.None) {}
 
@@ -71,11 +51,6 @@ namespace A1
         public bool IsColAbs => HasTraits(AddressTraits.AbsoluteColumn);
 
         bool HasTraits(AddressTraits traits) => (Traits & traits) == traits;
-
-        static AddressTraits GetTraits(bool isRowAbs, bool isColAbs)
-            => AddressTraits.None
-             | (isRowAbs ? AddressTraits.AbsoluteRow : AddressTraits.None)
-             | (isColAbs ? AddressTraits.AbsoluteColumn : AddressTraits.None);
 
         public bool Equals(Address other) =>
                IsColAbs == other.IsColAbs
@@ -173,7 +148,9 @@ namespace A1
                   && i < s.Length && ((absrow = s[i] == '$') || s[i] >= '0' && s[i] <= '9')
                   && col <= A1Convert.MaxColumn && Int.TryParse(s, i + (absrow ? 1 : 0), out i, out var row)
                   && row >= 1
-                  ? new Address(new Row(row), new Col(col), GetTraits(absrow, abscol))
+                  ? new Address(new Row(row), new Col(col), AddressTraits.None
+                                                          | (absrow ? AddressTraits.AbsoluteRow : AddressTraits.None)
+                                                          | (abscol ? AddressTraits.AbsoluteColumn : AddressTraits.None))
                   : (Address?) null;
 
             stopIndex = i;

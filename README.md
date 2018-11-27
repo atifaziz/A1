@@ -94,13 +94,10 @@ Initializing an `Address` and formatting:
 
 
 ```c#
-Console.WriteLine(new Address(new Col(12) + new Row(34)));              // M35
-Console.WriteLine(new Address(new Col(12) + new Row(34), false));       // M35
-Console.WriteLine(new Address(new Col(12) + new Row(34), true));        // $M$35
-Console.WriteLine(new Address(false, new Col(12), false, new Row(34))); // M35
-Console.WriteLine(new Address(true , new Col(12), false, new Row(34))); // $M35
-Console.WriteLine(new Address(false, new Col(12), true , new Row(34))); // M$35
-Console.WriteLine(new Address(true , new Col(12), true , new Row(34))); // $M$35
+Console.WriteLine(new Address(new Col(12) + new Row(34)));                               // M35
+Console.WriteLine(new Address(new Col(12) + new Row(34), AddressTraits.Absolute));       // $M$35
+Console.WriteLine(new Address(new Col(12) + new Row(34), AddressTraits.AbsoluteColumn)); // $M35
+Console.WriteLine(new Address(new Col(12) + new Row(34), AddressTraits.AbsoluteRow));    // M$35
 ```
 
 Parsing an A1-style reference into an `Address`:
