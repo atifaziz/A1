@@ -64,10 +64,10 @@ A `RowCol` value can be tested for containment within a matrix defined by
 a pair of `RowCol` values (top-left then bottom-right):
 
 ```c#
-var xy = new ColRow(13, 35);
-var lt = new ColRow(1, 1);
-var rbSmall = new ColRow(10, 10);
-var rbLarge = new ColRow(100, 100);
+var xy = new Col(13) + new Row(35);
+var lt = new Col(1) + new Row(1); // or default(RowCol)
+var rbSmall = new Col(10) + new Row(10);
+var rbLarge = new Col(100) + new Row(100);
 Console.WriteLine(xy.IsContainedIn(lt, rbSmall)); // False
 Console.WriteLine(xy.IsContainedIn(lt, rbLarge)); // True
 ```
