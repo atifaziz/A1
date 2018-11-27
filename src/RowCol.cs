@@ -19,17 +19,17 @@ namespace A1
     using System;
     using System.Diagnostics.Contracts;
 
-    public partial struct Col
+    public readonly partial struct Col
     {
         public static RowCol operator +(Col col, Row row) => new RowCol(row, col);
     }
 
-    public partial struct Row
+    public readonly partial struct Row
     {
         public static RowCol operator +(Row row, Col col) => new RowCol(row, col);
     }
 
-    public struct RowCol : IEquatable<RowCol>
+    public readonly struct RowCol : IEquatable<RowCol>
     {
         public static readonly RowCol TopLeft = new RowCol(Row.First, Col.First);
 

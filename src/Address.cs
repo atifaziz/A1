@@ -18,7 +18,7 @@ namespace A1
 {
     using System;
 
-    public struct Address : IEquatable<Address>
+    public readonly struct Address : IEquatable<Address>
     {
         public bool IsRowAbs { get; }
         public bool IsColAbs { get; }
