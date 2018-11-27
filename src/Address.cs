@@ -18,38 +18,64 @@ namespace A1
 {
     using System;
 
+    [Flags]
+    public enum AddressTraits
+    {
+        None,
+        AbsoluteRow = 1,
+        AbsoluteColumn = 2,
+        Absolute = AbsoluteRow | AbsoluteColumn,
+    }
+
     public readonly struct Address : IEquatable<Address>
     {
-        public bool IsRowAbs { get; }
-        public bool IsColAbs { get; }
         public RowCol RowCol { get; }
-        public Row Row => RowCol.Row;
-        public Col Col => RowCol.Col;
+        public AddressTraits Traits { get; }
 
         public Address(Row row, Col col) :
-            this(row, col, false) {}
+            this(row, col, AddressTraits.None) {}
 
-        public Address(RowCol rc) :
-            this(rc.Row, rc.Col, false) {}
+        public Address(Row row, Col col, AddressTraits traits) :
+            this(new RowCol(row, col), traits) {}
 
+        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
         public Address(Row row, Col col, bool isAbs) :
-            this(isAbs, row, isAbs, col) {}
+            this(row, col, isAbs ? AddressTraits.Absolute : AddressTraits.None) {}
 
+        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
         public Address(Col col, Row row, bool isAbs) :
             this(row, col, isAbs) {}
 
+        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
         public Address(RowCol rc, bool isAbs) :
-            this(isAbs, rc.Row, isAbs, rc.Col) {}
+            this(rc.Row, rc.Col, isAbs ? AddressTraits.Absolute : AddressTraits.None) {}
 
+        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
         public Address(bool isColAbs, Col col, bool isRowAbs, Row row) :
-            this(isRowAbs, row, isColAbs, col) {}
+            this(row, col, GetTraits(isRowAbs, isColAbs)) {}
 
-        public Address(bool isRowAbs, Row row, bool isColAbs, Col col)
-        {
-            IsColAbs = isColAbs;
-            IsRowAbs = isRowAbs;
-            RowCol = new RowCol(row, col);
-        }
+        [Obsolete("Use constructor accepting " + nameof(AddressTraits) + " instead.")]
+        public Address(bool isRowAbs, Row row, bool isColAbs, Col col) :
+            this(row, col, GetTraits(isRowAbs, isColAbs)) {}
+
+        public Address(RowCol rc) :
+            this(rc, AddressTraits.None) {}
+
+        public Address(RowCol rc, AddressTraits traits) =>
+            (RowCol, Traits) = (rc, traits);
+
+        public Row Row => RowCol.Row;
+        public Col Col => RowCol.Col;
+
+        public bool IsRowAbs => HasTraits(AddressTraits.AbsoluteRow);
+        public bool IsColAbs => HasTraits(AddressTraits.AbsoluteColumn);
+
+        bool HasTraits(AddressTraits traits) => (Traits & traits) == traits;
+
+        static AddressTraits GetTraits(bool isRowAbs, bool isColAbs)
+            => AddressTraits.None
+             | (isRowAbs ? AddressTraits.AbsoluteRow : AddressTraits.None)
+             | (isColAbs ? AddressTraits.AbsoluteColumn : AddressTraits.None);
 
         public bool Equals(Address other) =>
                IsColAbs == other.IsColAbs
@@ -66,7 +92,7 @@ namespace A1
               FormatAbs(IsColAbs) + A1Convert.NumberColumnAlpha(Col)
             + FormatAbs(IsRowAbs) + Row;
 
-        public Address MakeAbsolute() => new Address(Row, Col, true);
+        public Address MakeAbsolute() => new Address(Row, Col, AddressTraits.Absolute);
         public Address MakeRelative() => new Address(Row, Col);
 
         public static bool operator ==(Address left, Address right) => left.Equals(right);
@@ -147,7 +173,7 @@ namespace A1
                   && i < s.Length && ((absrow = s[i] == '$') || s[i] >= '0' && s[i] <= '9')
                   && col <= A1Convert.MaxColumn && Int.TryParse(s, i + (absrow ? 1 : 0), out i, out var row)
                   && row >= 1
-                  ? new Address(abscol, new Col(col), absrow, new Row(row))
+                  ? new Address(new Row(row), new Col(col), GetTraits(absrow, abscol))
                   : (Address?) null;
 
             stopIndex = i;
