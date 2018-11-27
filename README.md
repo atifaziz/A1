@@ -87,7 +87,7 @@ Determine size of the box formed by two `RowCol` values:
 var a = new Col(17) + new Row(5);
 var b = new Col(19) + new Row(71);
 var s = a.Size(b, (h, w) => new { Width = w, Height = h });
-Console.WriteLine(s.ToString()); // { X = 3, Y = 67 }
+Console.WriteLine(s.ToString()); // { Width = 3, Height = 67 }
 ```
 
 Initializing an `Address` and formatting:
