@@ -46,26 +46,26 @@ Following is a demonstration of to use these types.
 Initialize a `RowCol` then format in A1-style:
 
 ```c#
-var rc = new Col(12) + new Row(34);
-Console.WriteLine(rc);                            // (34,12)
+var rc = new Col(13) + new Row(35);
+Console.WriteLine(rc);                            // (35,13)
 Console.WriteLine(rc.FormatA1());                 // M35
 ```
 
 `RowCol` values can be compared for equality and inequality:
 
 ```c#
-Console.WriteLine(rc == new Col(34) + new Row(12)); // False
-Console.WriteLine(rc != new Col(34) + new Row(12)); // True
-Console.WriteLine(rc == new Col(12) + new Row(34)); // True
-Console.WriteLine(rc != new Col(12) + new Row(34)); // False
+Console.WriteLine(rc == new Col(35) + new Row(13)); // False
+Console.WriteLine(rc != new Col(35) + new Row(13)); // True
+Console.WriteLine(rc == new Col(13) + new Row(35)); // True
+Console.WriteLine(rc != new Col(13) + new Row(35)); // False
 ```
 
 A `RowCol` value can be tested for containment within a matrix defined by
 a pair of `RowCol` values (top-left then bottom-right):
 
 ```c#
-var xy = new ColRow(12, 34);
-var lt = new ColRow(0, 0);
+var xy = new ColRow(13, 35);
+var lt = new ColRow(1, 1);
 var rbSmall = new ColRow(10, 10);
 var rbLarge = new ColRow(100, 100);
 Console.WriteLine(xy.IsContainedIn(lt, rbSmall)); // False
@@ -94,10 +94,10 @@ Initializing an `Address` and formatting:
 
 
 ```c#
-Console.WriteLine(new Address(new Col(12) + new Row(34)));                               // M35
-Console.WriteLine(new Address(new Col(12) + new Row(34), AddressTraits.Absolute));       // $M$35
-Console.WriteLine(new Address(new Col(12) + new Row(34), AddressTraits.AbsoluteColumn)); // $M35
-Console.WriteLine(new Address(new Col(12) + new Row(34), AddressTraits.AbsoluteRow));    // M$35
+Console.WriteLine(new Address(new Col(13) + new Row(35)));                               // M35
+Console.WriteLine(new Address(new Col(13) + new Row(35), AddressTraits.Absolute));       // $M$35
+Console.WriteLine(new Address(new Col(13) + new Row(35), AddressTraits.AbsoluteColumn)); // $M35
+Console.WriteLine(new Address(new Col(13) + new Row(35), AddressTraits.AbsoluteRow));    // M$35
 ```
 
 Parsing an A1-style reference into an `Address`:
@@ -106,10 +106,10 @@ Parsing an A1-style reference into an `Address`:
 var a = Address.ParseA1("M$35");
 Console.WriteLine(a);           // M$35
 Console.WriteLine(a.IsRowAbs);  // True
-Console.WriteLine(a.Row);       // 34
+Console.WriteLine(a.Row);       // 35
 Console.WriteLine(a.IsColAbs);  // True
-Console.WriteLine(a.Col);       // 12
-Console.WriteLine(a.RowCol);    // (34, 12)
+Console.WriteLine(a.Col);       // 13
+Console.WriteLine(a.RowCol);    // (35,13)
 ```
 
 Make an `Address` absolute and then relative again:
