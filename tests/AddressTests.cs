@@ -332,5 +332,47 @@ namespace A1.Tests
                 Address.TryParseA1Range(string.Empty, 0, null));
             Assert.Equal("selector", e.ParamName);
         }
+
+        [Theory]
+        [InlineData("A2"  , 0, true , 2, 1, 2)]
+        [InlineData("B3"  , 0, true , 2, 2, 3)]
+        [InlineData(" C4" , 0, false, 0, 0, 0)]
+        [InlineData("C4 " , 0, true , 2, 3, 4)]
+        [InlineData(" C4 ", 1, true , 3, 3, 4)]
+        public void TryParseA1OnPartialString(string s, int index,
+                                              bool parseable, int stopIndex,
+                                              int col, int row)
+        {
+            var success = Address.TryParseA1(s, index, out var si, out var a);
+            Assert.Equal(parseable, success);
+            Assert.Equal(stopIndex, si);
+            if (!parseable)
+                return;
+            Assert.Equal(new Address(new Row(row), new Col(col)), a);
+        }
+
+        [Theory]
+        [InlineData("A2"     , 0, true , 2, 1, 2, 1, 2)]
+        [InlineData("A2:B3"  , 0, true , 5, 1, 2, 2, 3)]
+        [InlineData("B3:C4"  , 0, true , 5, 2, 3, 3, 4)]
+        [InlineData(" C4:D5" , 0, false, 0, 0, 0, 0, 0)]
+        [InlineData("C4:D5 " , 0, true , 5, 3, 4, 4, 5)]
+        [InlineData(" C4:D5 ", 1, true , 6, 3, 4, 4, 5)]
+        [InlineData("C"      , 0, false, 1, 0, 0, 0, 0)]
+        [InlineData("C4:"    , 0, false, 3, 0, 0, 0, 0)]
+        [InlineData("C4:D"   , 0, false, 4, 0, 0, 0, 0)]
+        public void TryParseA1RangeOnPartialString(string s, int index,
+                                                   bool parseable, int stopIndex,
+                                                   int col1, int row1,
+                                                   int col2, int row2)
+        {
+            var success = Address.TryParseA1Range(s, index, out var si, out var f, out var t);
+            Assert.Equal(parseable, success);
+            Assert.Equal(stopIndex, si);
+            if (!parseable)
+                return;
+            Assert.Equal(new Address(new Row(row1), new Col(col1)), f);
+            Assert.Equal(new Address(new Row(row2), new Col(col2)), t);
+        }
     }
 }
