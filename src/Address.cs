@@ -99,6 +99,7 @@ namespace A1
 
         public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector)
         {
+            if (range == null) throw new ArgumentNullException(nameof(range));
             if (selector == null) throw new ArgumentNullException(nameof(selector));
 
             return TryParseA1Range(range, 0, out _, out var from, out var to)
