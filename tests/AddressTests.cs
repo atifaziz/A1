@@ -316,5 +316,21 @@ namespace A1.Tests
             Assert.Throws<FormatException>(() =>
                 Address.ParseA1("A" + (int.MaxValue + 1L).ToString(CultureInfo.InvariantCulture)));
         }
+
+        [Fact]
+        public void TryParseA1RangeWithNullStringThrows()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                Address.TryParseA1Range(null, 0, delegate { throw new NotImplementedException(); }));
+            Assert.Equal("range", e.ParamName);
+        }
+
+        [Fact]
+        public void TryParseA1RangeWithNullSelectorThrows()
+        {
+            var e = Assert.Throws<ArgumentNullException>(() =>
+                Address.TryParseA1Range(string.Empty, 0, null));
+            Assert.Equal("selector", e.ParamName);
+        }
     }
 }

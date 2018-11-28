@@ -97,8 +97,14 @@ namespace A1
         public static (Address From, Address To)? TryParseA1Range(string range) =>
             TryParseA1Range(range, ((Address, Address)?) null, (from, to) => (from, to));
 
-        public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector) =>
-            TryParseA1Range(range, 0, out _, out var from, out var to) ? selector(from, to) : error;
+        public static T TryParseA1Range<T>(string range, T error, Func<Address, Address, T> selector)
+        {
+            if (selector == null) throw new ArgumentNullException(nameof(selector));
+
+            return TryParseA1Range(range, 0, out _, out var from, out var to)
+                 ? selector(from, to)
+                 : error;
+        }
 
         public static bool TryParseA1Range(string range, int index,
                                            out int stopIndex,
