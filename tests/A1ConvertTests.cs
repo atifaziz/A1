@@ -115,5 +115,19 @@ namespace A1.Tests
                 }
             }
         }
+
+        [Theory]
+        [InlineData("A"  , 0, true , 1, 1)]
+        [InlineData("B"  , 0, true , 1, 2)]
+        [InlineData(" C" , 0, false, 0, 0)]
+        [InlineData("C " , 0, true , 1, 3)]
+        [InlineData(" C ", 1, true , 2, 3)]
+        public void TryAlphaColumnNumberOnPartialString(string alpha, int index, bool parseable, int stopIndex, int number)
+        {
+            var success = A1Convert.TryAlphaColumnNumber(alpha, index, out var si, out var n);
+            Assert.Equal(parseable, success);
+            Assert.Equal(stopIndex, si);
+            Assert.Equal(number, n);
+        }
     }
 }
