@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard1.0</TargetFrameworks>
     <LangVersion>7.2</LangVersion>
     <VersionPrefix>2.0.0</VersionPrefix>
     <DebugType>portable</DebugType>
-    <Description>.NET Standard 1.0 library whose purpose is to help parse and format A1-style cell references (or addresses) like $FOO$42, those typically found in spreadsheet programs such as Microsoft Excel.</Description>
+    <Description>.NET Standard 1.0+ library whose purpose is to help parse and format A1-style cell references (or addresses) like $FOO$42, those typically found in spreadsheet programs such as Microsoft Excel.</Description>
     <Copyright>Copyright © 2016 Atif Aziz. All rights reserved.</Copyright>
     <Title>A1-Style Cell Address Parsing &amp; Formatting</Title>
     <Authors>Atif Aziz</Authors>
@@ -48,8 +48,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.0'">
+    <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 

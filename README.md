@@ -4,9 +4,10 @@
 [![NuGet][nuget-badge]][nuget-pkg]
 [![MyGet][myget-badge]][edge-pkgs]
 
-A1 is a [.NET Standard][netstd] 1.0 library whose purpose is to help parse and
-format A1-style cell references (or addresses) like `$FOO$42`, such as those
-typically found in spreadsheet programs such as [Microsoft Excel][xl].
+A1 is a [.NET Standard][netstd] 1.0+ library whose purpose is to help parse
+and format A1-style cell references (or addresses) like `$FOO$42`, such as
+those typically found in spreadsheet programs such as [Microsoft Excel][xl].
+
 
 ## Usage
 
