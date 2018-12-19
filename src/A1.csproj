@@ -11,7 +11,7 @@
     <Authors>Atif Aziz</Authors>
     <PackageTags>excel;cell</PackageTags>
     <PackageProjectUrl>https://github.com/atifaziz/A1</PackageProjectUrl>
-    <PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0</PackageLicenseUrl>
+    <PackageLicenseFile>COPYING.txt</PackageLicenseFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageOutputPath>..\dist</PackageOutputPath>
     <IncludeSymbols>true</IncludeSymbols>
@@ -33,11 +33,7 @@
   <ItemGroup>
     <None Remove="tt.cmd" />
     <None Remove="tt.sh" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\COPYING.txt" Link="COPYING.txt">
-      <PackagePath />
-    </Content>
+    <None Include="..\COPYING.txt" Pack="true" PackagePath="$(PackageLicenseFile)"/>
   </ItemGroup>
 
   <ItemGroup>
