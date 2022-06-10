@@ -16,7 +16,7 @@ characters from the alphabet) into a zero-based column offset:
 
 ```c#
 var a = A1Convert.AlphaColumnNumber("A");
-Console.WriteLine(a); // 0
+Console.WriteLine(a); // 1
 ```
 
 Convert a zero-based column offset into an alphabet-string:
